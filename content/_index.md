@@ -5,24 +5,25 @@
 title = "Ciallo～(∠・ω< )⌒★"
 +++
 
-# A match made in heaven 
+# (๑•̀ㅂ•́)و✧
 
-There is a website obesity crisis. Bloated websites full of scripts, ads, and trackers are slowing your readers down every time they try to read your well-crafted content.
+这里是我的个人博客，我将在这里记录一些有意思的东西🤔，在这里制作一些有魅力的东西，
+在这里诞生一点有灵魂的东西
 
-Hugo Bear Blog is all you need to build a fantastic and optimized site or blog. It works perfectly on **any** viewing device. All you need to focus on is writing good content.
+我要坚持在这里多写一点东西
 
-[Go to the original bear blog](https://bearblog.dev/).
+希望你能在这里找到自己需要的文章
 
----
-
-What happens when you combine the worlds' fastest, most lightweight static site generator with a design theme built to provide you with free, no-nonsense, super-fast blogging capabilities?
-
-**Use this theme, and find out!**
-
-Made with 💟 by [Jan Raasch](https://www.janraasch.com).
+[Go to my github](https://github.com/zzz-k-k).
 
 ---
 
-Simply publish content online, grow an audience, and keep your pages tiny, fast, and **optimized for search engines**.
+**无限进步!**
 
-Each page is ~5kb, and you can **host your blog yourself**.
+Made with 🥳 by [huyuxi](http://huyuqwqovo.top).
+
+---
+
+**操千曲而后晓声，观千剑而后识器。**.
+
+**紫薯布丁紫薯布丁紫薯布丁🍮😋**.

@@ -1,14 +1,14 @@
 # Base URL used when generating links to your pages
 # Set to the URL for your site
-baseURL = "https://example.com"
+baseURL = "http://huyuqwqovo.top"
 
 # The name of this wonderful theme ;-).
 theme = 'hugo-bearblog'
 
 # Basic metadata configuration for your blog.
-title = "Hugo ʕ•ᴥ•ʔ Bear Blog"
-author = "Jane Doe"
-copyright = "Copyright © 2020, Jane Doe."
+title = "huyuxi Ciallo～(∠・ω< )⌒★ Blog"
+author = "hu yuxi"
+copyright = "Copyright © 2024, huyuxi."
 languageCode = "zh-CN"
 
 # Generate a nice robots.txt for SEO
