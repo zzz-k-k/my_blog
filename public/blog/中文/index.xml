@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>中文 on Hugo ʕ•ᴥ•ʔ Bear Blog</title>
+    <link>https://example.com/blog/%E4%B8%AD%E6%96%87/</link>
+    <description>Recent content in 中文 on Hugo ʕ•ᴥ•ʔ Bear Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>Copyright © 2020, Jane Doe.</copyright>
+    <lastBuildDate>Tue, 25 Mar 2025 18:40:22 +0800</lastBuildDate>
+    <atom:link href="https://example.com/blog/%E4%B8%AD%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tt</title>
+      <link>https://example.com/tt/</link>
+      <pubDate>Tue, 25 Mar 2025 18:40:22 +0800</pubDate>
+      <guid>https://example.com/tt/</guid>
+      <description>&lt;p&gt;This is a page about »Tt«.&lt;/p&gt;&#xA;&lt;p&gt;新建文档测试&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
