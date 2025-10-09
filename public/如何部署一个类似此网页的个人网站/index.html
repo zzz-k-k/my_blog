@@ -55,7 +55,15 @@ hugo serve
 
 注意选择正确的分支（main或者master）
 然后点击deploy html
-大功告成，你获得了自己的网站🥳🥳🥳" />
+以下是hugo博客目录下各文件夹的作用
+my-hugo-blog/
+├── archetypes/         # 内容模板的原型
+├── content/            # 你所有的博客文章、页面等
+├── data/               # 数据文件 (JSON, YAML, TOML)
+├── layouts/            # 网站的 HTML 模板
+├── static/             # 静态文件 (CSS, JS, 图片等)
+├── themes/             # 你下载的主题存放处
+└── config.toml         # 网站的全局配置文件" />
 <meta name="keywords" content="部署," />
 
 
@@ -67,10 +75,12 @@ hugo serve
 hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
 hugo 观察是否报错 然后运行以下命令来启动服务
 hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-大功告成，你获得了自己的网站🥳🥳🥳">
+以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2025-03-26T18:45:30+08:00">
+    <meta property="article:modified_time" content="2025-03-26T18:45:30+08:00">
     <meta property="article:tag" content="部署">
     <meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
 
@@ -85,7 +95,7 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
 hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
 hugo 观察是否报错 然后运行以下命令来启动服务
 hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-大功告成，你获得了自己的网站🥳🥳🥳">
+以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
 
 
 
@@ -96,8 +106,10 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
 hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
 hugo 观察是否报错 然后运行以下命令来启动服务
 hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-大功告成，你获得了自己的网站🥳🥳🥳">
-  <meta itemprop="wordCount" content="59">
+以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
+  <meta itemprop="datePublished" content="2025-03-26T18:45:30+08:00">
+  <meta itemprop="dateModified" content="2025-03-26T18:45:30+08:00">
+  <meta itemprop="wordCount" content="97">
   <meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
   <meta itemprop="keywords" content="部署">
 <meta name="referrer" content="no-referrer-when-downgrade" />
@@ -279,8 +291,8 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
 <h1>如何部署一个类似此网页的个人网站</h1>
 <p>
   <i>
-    <time datetime='0001-01-01'>
-      01 Jan, 0001
+    <time datetime='2025-03-26'>
+      26 Mar, 2025
     </time>
   </i>
 </p>
@@ -333,6 +345,15 @@ windows下载下图所示版本
 <img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250327002239989.png" alt="image.png">
 注意选择正确的分支（main或者master）
 然后点击deploy html</p>
+<p>以下是hugo博客目录下各文件夹的作用
+my-hugo-blog/
+├── archetypes/         # 内容模板的原型
+├── content/            # 你所有的博客文章、页面等
+├── data/               # 数据文件 (JSON, YAML, TOML)
+├── layouts/            # 网站的 HTML 模板
+├── static/             # 静态文件 (CSS, JS, 图片等)
+├── themes/             # 你下载的主题存放处
+└── config.toml         # 网站的全局配置文件</p>
 <p><strong>大功告成，你获得了自己的网站</strong>🥳🥳🥳</p>
 
 </content>
