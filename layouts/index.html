@@ -1,3 +1,9 @@
 {{ define "main" }}
-{{ .Content }}
+<article class="doc">
+  <div class="doc-body intro">
+    {{ .Content }}
+  </div>
+  <h2 class="section-label">文章</h2>
+  {{ partial "post-cards.html" ((where site.RegularPages "Section" "blog").ByDate.Reverse) }}
+</article>
 {{ end }}

@@ -1,3 +1,45 @@
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_body.html into
-  your local /layouts/partials-directory -->
+<script>
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      if (themeBtn) {
+        var dark = theme === "dark";
+        themeBtn.setAttribute("aria-label", dark ? "切换浅色主题" : "切换深色主题");
+      }
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+    }
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+    var headings = [];
+    tocLinks.forEach(function (link) {
+      var id = decodeURIComponent((link.getAttribute("href") || "").replace(/^#/, ""));
+      var heading = id ? document.getElementById(id) : null;
+      if (heading) headings.push({ heading: heading, link: link });
+    });
+    if (headings.length && "IntersectionObserver" in window) {
+      var active = null;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          if (active) active.classList.remove("is-active");
+          var match = headings.filter(function (item) { return item.heading === entry.target; })[0];
+          if (match) {
+            match.link.classList.add("is-active");
+            active = match.link;
+          }
+        });
+      }, { rootMargin: "-64px 0px -70% 0px", threshold: 0.1 });
+      headings.forEach(function (item) { observer.observe(item.heading); });
+    }
+  })();
+</script>

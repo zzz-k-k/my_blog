@@ -1,0 +1,11 @@
+<div class="post-list">
+  {{ range . }}
+  <a class="post-row" href="{{ .RelPermalink }}">
+    <h2>{{ .Title }}</h2>
+    <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}</time>
+    <p class="card-excerpt">{{ .Plain | replaceRE `\s+` " " | truncate 140 }}</p>
+  </a>
+  {{ else }}
+  <p class="meta">还没有文章</p>
+  {{ end }}
+</div>

@@ -1,42 +1,40 @@
 <!DOCTYPE html>
-<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}zh-CN{{ end }}">
 
 <head>
-  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {{- partial "favicon.html" . -}}
   <title>{{- block "title" . }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{- end }}</title>
-
   {{- partial "seo_tags.html" . -}}
   <meta name="referrer" content="no-referrer-when-downgrade" />
-
   {{ with .OutputFormats.Get "rss" -}}
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
   {{ end -}}
-
-  {{- partial "style.html" . -}}
-
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_head.html into
-  your local /layouts/partials-directory -->
   {{- partial "custom_head.html" . -}}
+  {{- partial "style.html" . -}}
 </head>
 
 <body>
-  <header>
+  {{- $showToc := false -}}
+  {{- with .Fragments.Headings -}}
+    {{- if gt (len .) 0 -}}
+      {{- $showToc = true -}}
+    {{- end -}}
+  {{- end -}}
+  <header class="topbar">
     {{- partial "header.html" . -}}
   </header>
-  <main>
-    {{- block "main" . }}{{- end }}
-  </main>
-  <footer>
-    {{- partial "footer.html" . -}}
-  </footer>
-
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_body.html into
-  your local /layouts/partials-directory -->
+  <div class="shell{{ if not $showToc }} no-toc{{ end }}">
+    <main>
+      {{- block "main" . }}{{- end }}
+    </main>
+    {{- if $showToc -}}
+    <aside class="toc" id="toc">
+      {{- partial "toc.html" . -}}
+    </aside>
+    {{- end -}}
+  </div>
   {{- partial "custom_body.html" . -}}
 </body>
 
