@@ -1,0 +1,5 @@
+<div class="grass-textures">
+{{ range split (.Get "names") "," }}
+  <figure><img data-texture="{{ . }}" {{ if in (slice "grassleaf" "accentleaf") . }}src="{{ printf "demos/pixel-grass/textures/%s.png" . | relURL }}"{{ end }} alt="{{ . }}：实时演示使用的纹理" width="192" height="128"><figcaption>{{ . }}</figcaption></figure>
+{{ end }}
+</div>

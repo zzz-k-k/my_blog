@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>图形学 on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+		<link>http://huyuqwqovo.top/blog/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</link>
+		<description>Recent content in 图形学 on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</description>
+		<generator>Hugo</generator>
+		<language>zh-CN</language>
+		
+		
+		
+			<copyright>Copyright © 2024, huyuxi.</copyright>
+		
+		
+			<lastBuildDate>Sun, 08 Nov 2026 23:00:00 +0800</lastBuildDate>
+		
+			<atom:link href="http://huyuqwqovo.top/blog/%E5%9B%BE%E5%BD%A2%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>一片草地的诞生：从绿色底板到风与云影</title>
+				<link>http://huyuqwqovo.top/pixel-grass/</link>
+				<pubDate>Sun, 08 Nov 2026 23:00:00 +0800</pubDate>
+				<guid>http://huyuqwqovo.top/pixel-grass/</guid>
+				<description>从一块绿色平面开始，逐步加入草片、色块、风场、假透视、分帧、角色拨草与云影。每一步都能实时观察，也能对照实际运行代码。</description>
+			</item>
+	</channel>
+</rss>

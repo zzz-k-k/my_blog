@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="http://huyuqwqovo.top/images/favicon.png" />
+<title>Shader | huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+<meta name="title" content="Shader" />
+<meta name="description" content="Hugo &#43; Bear = :heart:" />
+<meta name="keywords" content="hugo,shader,交互拆解,图形学,部署," />
+
+
+<meta property="og:url" content="http://huyuqwqovo.top/blog/shader/">
+	<meta property="og:site_name" content="huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog">
+	<meta property="og:title" content="Shader">
+	<meta property="og:description" content="Hugo &#43; Bear = :heart:">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="website">
+		<meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
+
+
+
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="http://huyuqwqovo.top/images/share.png">
+	<meta name="twitter:title" content="Shader">
+	<meta name="twitter:description" content="Hugo &#43; Bear = :heart:">
+
+
+
+
+	<meta itemprop="name" content="Shader">
+	<meta itemprop="description" content="Hugo &#43; Bear = :heart:">
+	<meta itemprop="datePublished" content="2026-11-08T23:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-11-08T23:00:00+08:00">
+	<meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+  <link rel="alternate" type="application/rss+xml" href="http://huyuqwqovo.top/blog/shader/index.xml" title="huyuxi Ciallo～(∠・ω< )⌒★ Blog" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.5/400.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --layer: #f4f4f4;
+    --layer-hover: #e8e8e8;
+    --text: #161616;
+    --text-secondary: #525252;
+    --text-helper: #6f6f6f;
+    --link: #0f62fe;
+    --link-hover: #0043ce;
+    --border: #e0e0e0;
+    --border-strong: #8d8d8d;
+    --selected: #e8e8e8;
+    --accent: #0f62fe;
+    --header-h: 48px;
+    --sidenav-w: 256px;
+    --toc-w: 224px;
+    --content-w: 800px;
+    --font: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #161616;
+    --layer: #262626;
+    --layer-hover: #353535;
+    --text: #f4f4f4;
+    --text-secondary: #c6c6c6;
+    --text-helper: #a8a8a8;
+    --link: #78a9ff;
+    --link-hover: #a6c8ff;
+    --border: #393939;
+    --border-strong: #6f6f6f;
+    --selected: #353535;
+    --accent: #0f62fe;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-top: var(--header-h);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a { color: var(--link); }
+  a:hover { color: var(--link-hover); }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font);
+    color: var(--text);
+    line-height: 1.3;
+    scroll-margin-top: 64px;
+  }
+
+  h1 { font-size: 40px; font-weight: 300; margin: 0 0 16px; }
+  h2 { font-size: 28px; font-weight: 400; margin: 40px 0 16px; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 8px; }
+  h4, h5, h6 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+
+  p { margin: 0 0 16px; }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 8000;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px 0 16px;
+  }
+
+  .brand {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand:hover { color: var(--text); text-decoration: none; }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover { background: var(--layer-hover); }
+
+  .theme-toggle { width: 40px; padding: 0; }
+  .theme-toggle svg { display: block; }
+  .theme-toggle .icon-sun { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, var(--content-w)) var(--toc-w);
+    justify-content: center;
+    align-items: start;
+    width: min(100%, calc(var(--content-w) + var(--toc-w)));
+    margin: 0 auto;
+  }
+
+  .shell.no-toc { grid-template-columns: minmax(0, var(--content-w)); width: min(100%, var(--content-w)); }
+
+  .toc {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow: auto;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  main { min-width: 0; padding: 32px 32px 64px; }
+
+  .nav-label {
+    margin: 16px 16px 8px;
+    color: var(--text-helper);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    background: var(--layer-hover);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a {
+    color: var(--text-secondary);
+    border-left: 1px solid var(--border);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .toc ul { list-style: none; margin: 0; padding: 0; }
+  .toc li ul a { padding-left: 32px; }
+  .toc a.is-active {
+    color: var(--link);
+    border-left: 2px solid var(--accent);
+    background: var(--layer);
+    font-weight: 600;
+  }
+
+  .doc-header { margin-bottom: 24px; }
+  .doc-body { font-size: 16px; line-height: 1.75; }
+  .doc-body > :first-child { margin-top: 0; }
+
+  .meta {
+    margin: 0;
+    color: var(--text-helper);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .section-label {
+    margin: 32px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .post-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title date"
+      "excerpt excerpt";
+    gap: 8px 16px;
+    align-items: start;
+    padding: 16px;
+    background: var(--layer);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .post-row:hover { background: var(--layer-hover); color: var(--text); text-decoration: none; }
+
+  .post-row h2 {
+    grid-area: title;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .post-row time {
+    grid-area: date;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .post-row .card-excerpt { grid-area: excerpt; }
+
+  .card-excerpt {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .tags li {
+    padding: 2px 8px;
+    background: var(--layer);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .doc-body a { color: var(--link); text-decoration: none; }
+  .doc-body a:hover { color: var(--link-hover); text-decoration: underline; }
+  .text-link { color: var(--link); text-decoration: none; }
+  .text-link:hover { text-decoration: underline; }
+
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 16px 16px 16px 20px;
+    background: var(--layer);
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  blockquote p:last-child { margin-bottom: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; }
+  th, td { border: 1px solid var(--border); padding: 12px 16px; text-align: left; vertical-align: top; }
+  th { background: var(--layer); font-weight: 600; }
+
+  code, pre, .highlight {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  code {
+    padding: 0 4px;
+    background: var(--layer);
+    color: var(--text);
+  }
+
+  pre, .highlight {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--layer);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  pre code, .highlight code { padding: 0; background: transparent; }
+
+  .highlight pre { margin: 0; padding: 0; border: 0; background: transparent; }
+
+  img { max-width: 100%; height: auto; border: 1px solid var(--border); }
+
+  details { margin: 16px 0; border: 1px solid var(--border); background: var(--bg); }
+  summary { padding: 12px 16px; background: var(--layer); font-weight: 600; cursor: pointer; }
+  details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+
+  ul, ol { margin: 0 0 16px; padding-left: 24px; }
+  li { margin: 4px 0; }
+
+  @media (max-width: 1100px) {
+    .shell, .shell.no-toc {
+      grid-template-columns: minmax(0, 1fr);
+      width: min(100%, var(--content-w));
+    }
+    .toc {
+      position: static;
+      height: auto;
+      border-left: 0;
+      border-bottom: 1px solid var(--border);
+      order: -1;
+      padding: 8px 16px 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 32px; }
+    main { padding: 24px 16px 48px; }
+    .post-row { gap: 8px 12px; }
+  }
+</style>
+<link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/code-blocks.css">
+</head>
+
+<body><header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/">huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</a>
+  <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="切换深色主题">
+    <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path fill="currentColor" d="M9.2 1.4a6.2 6.2 0 1 0 5.4 8.7 4.8 4.8 0 1 1-5.4-8.7z"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <circle cx="8" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" d="M8 1.4v1.8M8 12.8v1.8M1.4 8h1.8M12.8 8h1.8M3.3 3.3l1.3 1.3M11.4 11.4l1.3 1.3M12.7 3.3l-1.3 1.3M4.6 11.4l-1.3 1.3"/>
+    </svg>
+  </button>
+</div>
+</header>
+  <div class="shell no-toc">
+    <main>
+<article class="doc">
+  <h1>Shader</h1>
+  
+  <div class="post-list">
+  
+  <a class="post-row" href="/pixel-grass/">
+    <h2>一片草地的诞生：从绿色底板到风与云影</h2>
+    <time class="meta" datetime="2026-11-08">2026-11-08</time>
+    <p class="card-excerpt">一片看起来很复杂的像素草地，可以拆成一组能单独理解的机制。点击上方阶段按钮逐步叠加效果，拖动画面检查不同视角，再用「对比上一步」看清这次究竟新增了什么。 这篇文章依据 Dylearn 的草地项目进行教学拆解，作者视频是原始参考。演示使用 Three.js 和 GLSL 在浏览器中 …</p>
+  </a>
+  
+</div>
+
+</article>
+
+    </main></div><script>
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      if (themeBtn) {
+        var dark = theme === "dark";
+        themeBtn.setAttribute("aria-label", dark ? "切换浅色主题" : "切换深色主题");
+      }
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+    }
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+    var headings = [];
+    tocLinks.forEach(function (link) {
+      var id = decodeURIComponent((link.getAttribute("href") || "").replace(/^#/, ""));
+      var heading = id ? document.getElementById(id) : null;
+      if (heading) headings.push({ heading: heading, link: link });
+    });
+    if (headings.length && "IntersectionObserver" in window) {
+      var active = null;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          if (active) active.classList.remove("is-active");
+          var match = headings.filter(function (item) { return item.heading === entry.target; })[0];
+          if (match) {
+            match.link.classList.add("is-active");
+            active = match.link;
+          }
+        });
+      }, { rootMargin: "-64px 0px -70% 0px", threshold: 0.1 });
+      headings.forEach(function (item) { observer.observe(item.heading); });
+    }
+  })();
+</script>
+<script defer src="/js/code-blocks.js"></script>
+</body>
+
+</html>

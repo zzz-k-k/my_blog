@@ -1,0 +1,15 @@
+.doc-body .code-block { margin:16px 0; min-width:0; }
+.doc-body .code-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 12px; border:1px solid var(--border); border-bottom:0; background:var(--layer); color:var(--text-secondary); font:12px var(--mono); }
+.doc-body .code-language { text-transform:uppercase; letter-spacing:.04em; }
+.doc-body .code-copy { display:flex; align-items:center; gap:8px; }
+.doc-body .code-copy-status { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.doc-body .code-copy-status.is-error { position:static; width:auto; height:auto; overflow:visible; clip-path:none; white-space:normal; font:12px var(--font); color:var(--text-secondary); }
+.doc-body .code-copy-button { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border:0; background:transparent; color:var(--text-secondary); padding:6px; cursor:pointer; }
+.doc-body .code-copy-button svg { display:block; flex:none; }
+.doc-body .code-copy-button:hover { background:var(--layer-hover); }
+.doc-body .code-copy-button:disabled { cursor:wait; opacity:.6; }
+.doc-body .code-block > .highlight,.doc-body .code-block > pre { margin:0; }
+.doc-body pre code { color:var(--text); -webkit-user-select:text; user-select:text; white-space:pre; }
+.doc-body .code-block pre { tab-size:4; }
+.grass-code .code-block { margin:0; }
+@media(max-width:600px) { .doc-body .code-toolbar { padding:8px; } .doc-body .code-copy-status { max-width:170px; } }

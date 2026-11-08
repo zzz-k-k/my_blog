@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Hugo on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+		<link>http://huyuqwqovo.top/blog/hugo/</link>
+		<description>Recent content in Hugo on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</description>
+		<generator>Hugo</generator>
+		<language>zh-CN</language>
+		
+		
+		
+			<copyright>Copyright © 2024, huyuxi.</copyright>
+		
+		
+			<lastBuildDate>Mon, 09 Nov 2026 00:00:00 +0800</lastBuildDate>
+		
+			<atom:link href="http://huyuqwqovo.top/blog/hugo/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>如何部署一个类似此网页的个人网站</title>
+				<link>http://huyuqwqovo.top/%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E6%AD%A4%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</link>
+				<pubDate>Wed, 26 Mar 2025 18:45:30 +0800</pubDate>
+				<guid>http://huyuqwqovo.top/%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E6%AD%A4%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</guid>
+				<description>用 Hugo 写 Markdown，用 Git 管理源码，用 Netlify 发布静态页面。按步骤完成主题配置、首篇文章、本地预览、自动构建和自定义域名。</description>
+			</item>
+	</channel>
+</rss>

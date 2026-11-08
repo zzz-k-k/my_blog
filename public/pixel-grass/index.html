@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="http://huyuqwqovo.top/images/favicon.png" />
+<title>一片草地的诞生：从绿色底板到风与云影 | huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+<meta name="title" content="一片草地的诞生：从绿色底板到风与云影" />
+<meta name="description" content="九个可以旋转、暂停和对比的实时实验，拆解像素草地的贴图、世界风场、角色交互与卡通云影。" />
+<meta name="keywords" content="图形学,Shader,交互拆解," />
+
+
+<meta property="og:url" content="http://huyuqwqovo.top/pixel-grass/">
+	<meta property="og:site_name" content="huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog">
+	<meta property="og:title" content="一片草地的诞生：从绿色底板到风与云影">
+	<meta property="og:description" content="九个可以旋转、暂停和对比的实时实验，拆解像素草地的贴图、世界风场、角色交互与卡通云影。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2026-11-08T23:00:00+08:00">
+		<meta property="article:modified_time" content="2026-11-08T23:00:00+08:00">
+		<meta property="article:tag" content="图形学">
+		<meta property="article:tag" content="Shader">
+		<meta property="article:tag" content="交互拆解">
+		<meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
+
+
+
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="http://huyuqwqovo.top/images/share.png">
+	<meta name="twitter:title" content="一片草地的诞生：从绿色底板到风与云影">
+	<meta name="twitter:description" content="九个可以旋转、暂停和对比的实时实验，拆解像素草地的贴图、世界风场、角色交互与卡通云影。">
+
+
+
+
+	<meta itemprop="name" content="一片草地的诞生：从绿色底板到风与云影">
+	<meta itemprop="description" content="九个可以旋转、暂停和对比的实时实验，拆解像素草地的贴图、世界风场、角色交互与卡通云影。">
+	<meta itemprop="datePublished" content="2026-11-08T23:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-11-08T23:00:00+08:00">
+	<meta itemprop="wordCount" content="1614">
+	<meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
+	<meta itemprop="keywords" content="图形学,Shader,交互拆解">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.5/400.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --layer: #f4f4f4;
+    --layer-hover: #e8e8e8;
+    --text: #161616;
+    --text-secondary: #525252;
+    --text-helper: #6f6f6f;
+    --link: #0f62fe;
+    --link-hover: #0043ce;
+    --border: #e0e0e0;
+    --border-strong: #8d8d8d;
+    --selected: #e8e8e8;
+    --accent: #0f62fe;
+    --header-h: 48px;
+    --sidenav-w: 256px;
+    --toc-w: 224px;
+    --content-w: 800px;
+    --font: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #161616;
+    --layer: #262626;
+    --layer-hover: #353535;
+    --text: #f4f4f4;
+    --text-secondary: #c6c6c6;
+    --text-helper: #a8a8a8;
+    --link: #78a9ff;
+    --link-hover: #a6c8ff;
+    --border: #393939;
+    --border-strong: #6f6f6f;
+    --selected: #353535;
+    --accent: #0f62fe;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-top: var(--header-h);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a { color: var(--link); }
+  a:hover { color: var(--link-hover); }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font);
+    color: var(--text);
+    line-height: 1.3;
+    scroll-margin-top: 64px;
+  }
+
+  h1 { font-size: 40px; font-weight: 300; margin: 0 0 16px; }
+  h2 { font-size: 28px; font-weight: 400; margin: 40px 0 16px; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 8px; }
+  h4, h5, h6 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+
+  p { margin: 0 0 16px; }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 8000;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px 0 16px;
+  }
+
+  .brand {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand:hover { color: var(--text); text-decoration: none; }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover { background: var(--layer-hover); }
+
+  .theme-toggle { width: 40px; padding: 0; }
+  .theme-toggle svg { display: block; }
+  .theme-toggle .icon-sun { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, var(--content-w)) var(--toc-w);
+    justify-content: center;
+    align-items: start;
+    width: min(100%, calc(var(--content-w) + var(--toc-w)));
+    margin: 0 auto;
+  }
+
+  .shell.no-toc { grid-template-columns: minmax(0, var(--content-w)); width: min(100%, var(--content-w)); }
+
+  .toc {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow: auto;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  main { min-width: 0; padding: 32px 32px 64px; }
+
+  .nav-label {
+    margin: 16px 16px 8px;
+    color: var(--text-helper);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    background: var(--layer-hover);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a {
+    color: var(--text-secondary);
+    border-left: 1px solid var(--border);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .toc ul { list-style: none; margin: 0; padding: 0; }
+  .toc li ul a { padding-left: 32px; }
+  .toc a.is-active {
+    color: var(--link);
+    border-left: 2px solid var(--accent);
+    background: var(--layer);
+    font-weight: 600;
+  }
+
+  .doc-header { margin-bottom: 24px; }
+  .doc-body { font-size: 16px; line-height: 1.75; }
+  .doc-body > :first-child { margin-top: 0; }
+
+  .meta {
+    margin: 0;
+    color: var(--text-helper);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .section-label {
+    margin: 32px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .post-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title date"
+      "excerpt excerpt";
+    gap: 8px 16px;
+    align-items: start;
+    padding: 16px;
+    background: var(--layer);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .post-row:hover { background: var(--layer-hover); color: var(--text); text-decoration: none; }
+
+  .post-row h2 {
+    grid-area: title;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .post-row time {
+    grid-area: date;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .post-row .card-excerpt { grid-area: excerpt; }
+
+  .card-excerpt {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .tags li {
+    padding: 2px 8px;
+    background: var(--layer);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .doc-body a { color: var(--link); text-decoration: none; }
+  .doc-body a:hover { color: var(--link-hover); text-decoration: underline; }
+  .text-link { color: var(--link); text-decoration: none; }
+  .text-link:hover { text-decoration: underline; }
+
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 16px 16px 16px 20px;
+    background: var(--layer);
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  blockquote p:last-child { margin-bottom: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; }
+  th, td { border: 1px solid var(--border); padding: 12px 16px; text-align: left; vertical-align: top; }
+  th { background: var(--layer); font-weight: 600; }
+
+  code, pre, .highlight {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  code {
+    padding: 0 4px;
+    background: var(--layer);
+    color: var(--text);
+  }
+
+  pre, .highlight {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--layer);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  pre code, .highlight code { padding: 0; background: transparent; }
+
+  .highlight pre { margin: 0; padding: 0; border: 0; background: transparent; }
+
+  img { max-width: 100%; height: auto; border: 1px solid var(--border); }
+
+  details { margin: 16px 0; border: 1px solid var(--border); background: var(--bg); }
+  summary { padding: 12px 16px; background: var(--layer); font-weight: 600; cursor: pointer; }
+  details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+
+  ul, ol { margin: 0 0 16px; padding-left: 24px; }
+  li { margin: 4px 0; }
+
+  @media (max-width: 1100px) {
+    .shell, .shell.no-toc {
+      grid-template-columns: minmax(0, 1fr);
+      width: min(100%, var(--content-w));
+    }
+    .toc {
+      position: static;
+      height: auto;
+      border-left: 0;
+      border-bottom: 1px solid var(--border);
+      order: -1;
+      padding: 8px 16px 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 32px; }
+    main { padding: 24px 16px 48px; }
+    .post-row { gap: 8px 12px; }
+  }
+</style>
+<link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/code-blocks.css">
+</head>
+
+<body><header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/">huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</a>
+  <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="切换深色主题">
+    <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path fill="currentColor" d="M9.2 1.4a6.2 6.2 0 1 0 5.4 8.7 4.8 4.8 0 1 1-5.4-8.7z"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <circle cx="8" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" d="M8 1.4v1.8M8 12.8v1.8M1.4 8h1.8M12.8 8h1.8M3.3 3.3l1.3 1.3M11.4 11.4l1.3 1.3M12.7 3.3l-1.3 1.3M4.6 11.4l-1.3 1.3"/>
+    </svg>
+  </button>
+</div>
+</header>
+  <div class="shell no-toc grass-shell">
+    <main>
+<article class="doc">
+  <header class="doc-header">
+    <h1>一片草地的诞生：从绿色底板到风与云影</h1>
+    
+    <p class="meta">
+      <time datetime="2026-11-08">2026-11-08</time>
+    </p>
+    
+    
+    <ul class="tags">
+      
+      <li>图形学</li>
+      
+      <li>Shader</li>
+      
+      <li>交互拆解</li>
+      
+    </ul>
+    
+  </header>
+  <div class="doc-body">
+    <p>一片看起来很复杂的像素草地，可以拆成一组能单独理解的机制。点击上方阶段按钮逐步叠加效果，拖动画面检查不同视角，再用「对比上一步」看清这次究竟新增了什么。</p>
+<p>这篇文章依据 <a href="https://github.com/DylearnDev/Dylearn-3D-Pixel-Art-Grass-Demo">Dylearn 的草地项目</a>进行教学拆解，<a href="https://www.youtube.com/watch?v=OxsuWDtjuGw">作者视频</a>是原始参考。演示使用 Three.js 和 GLSL 在浏览器中重新实现，章节按教学顺序组织。</p>
+<link rel="stylesheet" href="/demos/pixel-grass/lab.css">
+<section class="grass-lab" aria-label="像素草地交互实验">
+  <nav id="grass-tabs" class="grass-tabs" aria-label="演化阶段">
+    
+    <button type="button" data-stage="1" aria-pressed="true"><span>01</span>底板</button>
+    
+    <button type="button" data-stage="2" aria-pressed="false"><span>02</span>草片</button>
+    
+    <button type="button" data-stage="3" aria-pressed="false"><span>03</span>色块</button>
+    
+    <button type="button" data-stage="4" aria-pressed="false"><span>04</span>风动</button>
+    
+    <button type="button" data-stage="5" aria-pressed="false"><span>05</span>假透视</button>
+    
+    <button type="button" data-stage="6" aria-pressed="false"><span>06</span>分帧</button>
+    
+    <button type="button" data-stage="7" aria-pressed="false"><span>07</span>角色拨草</button>
+    
+    <button type="button" data-stage="8" aria-pressed="false"><span>08</span>卡通光照</button>
+    
+    <button type="button" data-stage="9" aria-pressed="false"><span>09</span>云影</button>
+    
+  </nav>
+  <div class="grass-stage-heading"><span id="stage-number">01 / 09</span><strong id="stage-label">一切从一块绿色平面开始</strong></div>
+  <div class="grass-viewport" id="grass-viewport">
+    <canvas id="grass-canvas" tabindex="0" aria-label="三维草地，拖动旋转视角，方向键旋转，滚轮缩放"></canvas>
+    <div id="grass-status" role="status">正在准备草地与贴图…</div>
+    <div class="grass-overlay"><span>拖动旋转 · 滚轮缩放 · 方向键也可旋转</span><span id="grass-stats">640 × 360</span></div>
+  </div>
+  <div class="grass-toolbar">
+    <button id="grass-pause" type="button" aria-pressed="false">暂停动画</button>
+    <button id="grass-reset" type="button">重置视角</button>
+    <label><input id="grass-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="grass-pixels" type="checkbox" checked> 像素化</label>
+    <label>观察图层 <select id="grass-debug"><option value="0">最终画面</option><option value="1">色块噪声</option><option value="2">风场噪声</option><option value="3">云影遮罩</option></select></label>
+  </div>
+  <div class="grass-tuning">
+    <label data-from="2">草量 <input id="grass-density" type="range" min="1000" max="22000" step="1000" value="18000"><output>18000</output></label>
+    <label data-from="4">风速 <input id="grass-wind" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+    <label data-from="6">草的帧率 <input id="grass-fps" type="range" min="2" max="15" step="1" value="5"><output>5</output></label>
+    <label data-from="7">拨草范围 <input id="grass-radius" type="range" min="0.5" max="2" step="0.05" value="1.1"><output>1.1</output></label>
+    <label data-from="8">光照色阶 <input id="grass-cuts" type="range" min="2" max="6" step="1" value="3"><output>3</output></label>
+    <label data-from="9">云速 <input id="grass-cloud" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+  </div>
+  <p class="grass-caption" id="grass-caption">固定的三维场景，逐步加入新的机制。切换阶段会保留视角和草的位置。</p>
+  <noscript>实时演示需要 JavaScript。下方仍可阅读所有阶段、贴图说明和代码。</noscript>
+</section>
+<script type="module" src="/demos/pixel-grass/main.js"></script>
+
+<section class="grass-step" data-step="1" aria-labelledby="grass-step-1">
+  <p class="grass-eyebrow">拆解笔记 / STEP 1</p>
+  <h2 id="grass-step-1">底板：先约定世界与像素的尺度</h2>
+
+<p><strong>本步新增：绿色平面、正交相机、低分辨率画面。</strong> 暂时没有草、噪声或动态光照。能看到的厚边是为了方便观察平面边界而增加的展示底座，不参与草地算法。</p>
+<p>地面位于世界坐标的 XZ 平面，Y 轴向上，大小是 12 × 12。相机围绕场景中心旋转，正交投影保证远处的草不会因距离变小。原项目也是正交相机，但原场景没有这里的鼠标环绕交互。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/main.js">main.js</a> / camera</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">viewHeight</span><span class="o">=</span><span class="mf">13.5</span><span class="p">,</span> <span class="nx">aspect</span><span class="o">=</span><span class="mi">16</span><span class="o">/</span><span class="mi">9</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">camera</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">OrthographicCamera</span><span class="p">(</span><span class="o">-</span><span class="nx">viewHeight</span><span class="o">*</span><span class="nx">aspect</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">viewHeight</span><span class="o">*</span><span class="nx">aspect</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">viewHeight</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="nx">viewHeight</span><span class="o">/</span><span class="mi">2</span><span class="p">,.</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Ground plane is 12 × 12 world units. Camera orbit changes only the view.
+</span></span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">geometry</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">PlaneGeometry</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">geometry</span><span class="p">.</span><span class="nx">rotateX</span><span class="p">(</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>像素化发生在输出阶段。</strong> 我们先渲染 640 × 360 的图像，再由 CSS 的 <code>image-rendering: pixelated</code> 放大。它不会把三维坐标变成整数，也没有实现相机像素吸附。因此缓慢转动时，细边缘仍可能出现像素跳动。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/main.js">main.js</a> / pixel-render</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">pixelated</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;grass-pixels&#39;</span><span class="p">).</span><span class="nx">checked</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">pixelated</span> <span class="o">?</span> <span class="mi">640</span> <span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">clientWidth</span> <span class="o">*</span> <span class="nx">devicePixelRatio</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">setSize</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">width</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">16</span><span class="p">),</span> <span class="kc">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">canvas</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">imageRendering</span> <span class="o">=</span> <span class="nx">pixelated</span> <span class="o">?</span> <span class="s1">&#39;pixelated&#39;</span> <span class="o">:</span> <span class="s1">&#39;auto&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// CSS scales the low-resolution render; the orthographic camera is unchanged.
+</span></span></span></code></pre></div>
+</figure>
+
+<p>地面片元目前只输出统一绿色。后续阶段会在同一个函数里逐步启用色块和光照，而不是替换整个场景。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/ground.frag.glsl">ground.frag.glsl</a> / ground</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.44</span><span class="p">,</span><span class="mf">0.62</span><span class="p">,</span><span class="mf">0.16</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="n">color</span> <span class="o">=</span> <span class="n">patchColor</span><span class="p">(</span><span class="n">vWorld</span><span class="p">.</span><span class="n">xz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">color</span> <span class="o">=</span> <span class="n">shadeGrass</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span><span class="n">vWorld</span><span class="p">,</span><span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">debugColor</span><span class="p">(</span><span class="n">vWorld</span><span class="p">,</span><span class="n">color</span><span class="p">),</span><span class="mf">1.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>贴图组合：无。</strong> 这一步的底色来自代码中的 RGB 常量。试着关闭「像素化」，观察几何体完全相同，改变的只是画面分辨率。
+</section>
+</p>
+<section class="grass-step" data-step="2" aria-labelledby="grass-step-2">
+  <p class="grass-eyebrow">拆解笔记 / STEP 2</p>
+  <h2 id="grass-step-2">草片：透明轮廓与面向相机的平面</h2>
+
+<p><strong>本步新增：大量草片、透明度裁切和少量装饰变体。</strong> 每撮草不是一个完整的叶片模型，而是一张竖起的矩形。贴图的 alpha 通道决定哪些像素留下，透明部分直接丢弃。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+  <figure><img data-texture="accentleaf" src="/demos/pixel-grass/textures/accentleaf.png" alt="accentleaf：实时演示使用的纹理" width="192" height="128"><figcaption>accentleaf</figcaption></figure>
+
+</div>
+
+<p><code>grassleaf.png</code> 是普通草的形状，<code>accentleaf.png</code> 是另一种点缀轮廓。棋盘格表示透明背景，不会画进三维场景。两张图来自 Dylearn，未修改原文件，采用最近邻采样，避免像素轮廓被插值模糊。</p>
+<p><strong>不是每撮草都单独提交一次绘制。</strong> 所有草共用一个四边形，用实例属性传入位置、随机数和尺寸。固定种子保证切换阶段或刷新后，布局仍能重复观察。默认显示 18,000 撮，可用草量滑杆调整。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/main.js">main.js</a> / instancing</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">blades</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">InstancedBufferGeometry</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">quad</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">PlaneGeometry</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="nx">quad</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">0</span><span class="p">,.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blades</span><span class="p">.</span><span class="nx">index</span><span class="o">=</span><span class="nx">quad</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span><span class="nx">blades</span><span class="p">.</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">position</span><span class="o">=</span><span class="nx">quad</span><span class="p">.</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">position</span><span class="p">;</span><span class="nx">blades</span><span class="p">.</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">uv</span><span class="o">=</span><span class="nx">quad</span><span class="p">.</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">uv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">count</span><span class="o">=</span><span class="mi">22000</span><span class="p">,</span> <span class="nx">roots</span><span class="o">=</span><span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">count</span><span class="o">*</span><span class="mi">3</span><span class="p">),</span> <span class="nx">seeds</span><span class="o">=</span><span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">count</span><span class="p">),</span> <span class="nx">scales</span><span class="o">=</span><span class="k">new</span> <span class="nx">Float32Array</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">seed</span><span class="o">=</span><span class="mi">20261108</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">random</span><span class="o">=</span><span class="p">()=&gt;{</span><span class="nx">seed</span><span class="o">=</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">imul</span><span class="p">(</span><span class="nx">seed</span><span class="p">,</span><span class="mi">1664525</span><span class="p">)</span><span class="o">+</span><span class="mi">1013904223</span><span class="p">)</span><span class="o">&gt;&gt;&gt;</span><span class="mi">0</span><span class="p">;</span><span class="k">return</span> <span class="nx">seed</span><span class="o">/</span><span class="mi">4294967296</span><span class="p">;};</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">count</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">roots</span><span class="p">.</span><span class="nx">set</span><span class="p">([(</span><span class="nx">random</span><span class="p">()</span><span class="o">-</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mf">11.9</span><span class="p">,.</span><span class="mi">015</span><span class="p">,(</span><span class="nx">random</span><span class="p">()</span><span class="o">-</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mf">11.9</span><span class="p">],</span><span class="nx">i</span><span class="o">*</span><span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">seeds</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">=</span><span class="nx">random</span><span class="p">();</span><span class="nx">scales</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="o">=</span><span class="p">.</span><span class="mi">26</span><span class="o">+</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="p">.</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blades</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;aRoot&#39;</span><span class="p">,</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">InstancedBufferAttribute</span><span class="p">(</span><span class="nx">roots</span><span class="p">,</span><span class="mi">3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blades</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;aSeed&#39;</span><span class="p">,</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">InstancedBufferAttribute</span><span class="p">(</span><span class="nx">seeds</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blades</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;aScale&#39;</span><span class="p">,</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">InstancedBufferAttribute</span><span class="p">(</span><span class="nx">scales</span><span class="p">,</span><span class="mi">1</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blades</span><span class="p">.</span><span class="nx">instanceCount</span><span class="o">=</span><span class="mi">18000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">grass</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Mesh</span><span class="p">(</span><span class="nx">blades</span><span class="p">,</span><span class="nx">material</span><span class="p">(</span><span class="s1">&#39;grass.vert.glsl&#39;</span><span class="p">,</span><span class="s1">&#39;grass.frag.glsl&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">grass</span><span class="p">.</span><span class="nx">frustumCulled</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span><span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">grass</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>为了让贴图不随着观察方向变成一条细线，使用相机的右向量和上向量构建草片。下方代码中的局部摇摆要到第四步才启用。这个网页版本把草片的底边设为旋转支点，以便直观观察草根不移动；这是教学实现的调整。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.vert.glsl">grass.vert.glsl</a> / billboard</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="c1">// Plane vertices start at the bottom edge: y is 0..1, not centered around zero.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">height</span> <span class="o">=</span> <span class="n">aScale</span> <span class="o">*</span> <span class="p">(</span><span class="n">vAccent</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">?</span> <span class="mf">1.25</span> <span class="o">:</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">local</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="mf">0.65</span><span class="p">,</span> <span class="n">position</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">height</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// A small camera-space sway remains independent of the world-space wind.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">4.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">sin</span><span class="p">((</span><span class="n">time</span> <span class="o">+</span> <span class="n">aSeed</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">PI</span><span class="p">)</span> <span class="o">*</span> <span class="n">radians</span><span class="p">(</span><span class="mf">10.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">local</span><span class="p">.</span><span class="n">xy</span> <span class="o">=</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">local</span><span class="p">.</span><span class="n">xy</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">uCamRight</span> <span class="o">*</span> <span class="n">local</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">uCamUp</span> <span class="o">*</span> <span class="n">local</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">normal</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>渲染时，普通草和装饰草使用同一个材质。固定随机数中约 4.5% 选择浅色草、1.5% 选择另一张草叶贴图；比例高于原 Demo，便于在小画面里看清点缀。<code>leaf.rgb</code> 保留贴图的明暗，<code>leaf.a</code> 控制轮廓。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.frag.glsl">grass.frag.glsl</a> / leaf-color</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec4</span> <span class="n">leaf</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uLeaf</span><span class="p">,</span> <span class="n">leafUV</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">vAccent</span> <span class="o">&gt;</span> <span class="mf">1.5</span><span class="p">)</span> <span class="n">leaf</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uAccent</span><span class="p">,</span> <span class="n">leafUV</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">leaf</span><span class="p">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.99</span><span class="p">)</span> <span class="k">discard</span><span class="p">;</span> <span class="c1">// Crisp silhouette, no translucent rectangles.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.44</span><span class="p">,</span><span class="mf">0.62</span><span class="p">,</span><span class="mf">0.16</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="n">color</span> <span class="o">=</span> <span class="n">patchColor</span><span class="p">(</span><span class="n">vRoot</span><span class="p">.</span><span class="n">xz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">vAccent</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="n">color</span> <span class="o">=</span> <span class="n">vAccent</span> <span class="o">&gt;</span> <span class="mf">1.5</span> <span class="o">?</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.33</span><span class="p">,</span><span class="mf">0.49</span><span class="p">,</span><span class="mf">0.13</span><span class="p">)</span> <span class="o">:</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.67</span><span class="p">,</span><span class="mf">0.76</span><span class="p">,</span><span class="mf">0.31</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Original sprites contain tonal detail as well as the alpha silhouette.</span>
+</span></span><span class="line"><span class="cl">  <span class="n">color</span> <span class="o">*=</span> <span class="n">leaf</span><span class="p">.</span><span class="n">rgb</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">color</span> <span class="o">=</span> <span class="n">shadeGrass</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">vNormal</span><span class="p">,</span> <span class="n">vRoot</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">debugColor</span><span class="p">(</span><span class="n">vRoot</span><span class="p">,</span><span class="n">color</span><span class="p">),</span><span class="mf">1.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>贴图组合：草叶 RGB × 基础颜色；草叶 alpha → 裁切。</strong> 此时没有噪声。旋转视角时观察叶片始终朝向相机，再调低草量，看看一撮草究竟是什么形状。
+</section>
+</p>
+<section class="grass-step" data-step="3" aria-labelledby="grass-step-3">
+  <p class="grass-eyebrow">拆解笔记 / STEP 3</p>
+  <h2 id="grass-step-3">色块：让草与地面说同一种颜色语言</h2>
+
+<p><strong>本步新增：两张世界坐标噪声和三种绿色。</strong> 色块草并不是另外一套几何体，而是同一套草片在不同区域取得不同颜色。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="patch-a"  alt="patch-a：实时演示使用的纹理" width="192" height="128"><figcaption>patch-a</figcaption></figure>
+
+  <figure><img data-texture="patch-b"  alt="patch-b：实时演示使用的纹理" width="192" height="128"><figcaption>patch-b</figcaption></figure>
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+</div>
+
+<table>
+	<thead>
+			<tr>
+					<th>输入</th>
+					<th>本步如何使用</th>
+					<th>与其他输入的关系</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>patch-a</code>，种子 17</td>
+					<td>以 <code>worldXZ × 0.12</code> 采样，超过 0.52 时使用浅绿</td>
+					<td>覆盖基础绿色</td>
+			</tr>
+			<tr>
+					<td><code>patch-b</code>，种子 83</td>
+					<td>以 <code>worldXZ × 0.10</code> 采样，超过 0.57 时使用深绿</td>
+					<td>在重叠区域继续覆盖 A</td>
+			</tr>
+			<tr>
+					<td>草叶贴图</td>
+					<td>保留草的轮廓与纹理明暗</td>
+					<td>不决定区域分布</td>
+			</tr>
+	</tbody>
+</table>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/common.glsl">common.glsl</a> / patches</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">patchColor</span><span class="p">(</span><span class="k">vec2</span> <span class="n">worldXZ</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Same world-space field on ground and blades; blades sample only at their root.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uPatchA</span><span class="p">,</span> <span class="n">worldXZ</span> <span class="o">*</span> <span class="mf">0.12</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uPatchB</span><span class="p">,</span> <span class="n">worldXZ</span> <span class="o">*</span> <span class="mf">0.10</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.44</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mf">0.16</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="mf">0.52</span><span class="p">)</span> <span class="n">color</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.57</span><span class="p">,</span> <span class="mf">0.69</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;</span> <span class="mf">0.57</span><span class="p">)</span> <span class="n">color</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.53</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">color</span><span class="p">;</span> <span class="c1">// B overrides A where the two masks overlap.</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>关键区别在采样位置。</strong> 地面使用每个片元的世界位置，因此能画出连续色块；草使用每撮草的根部位置，因此整撮草选中同一个区域颜色。不能把噪声绑在屏幕坐标上，否则旋转相机时，色块就会在地上滑动。</p>
+<p>这里的色块边界是阈值产生的硬边界。大量带草叶轮廓的草片覆盖边缘后，平滑平面的色块看起来会长出参差细节；源码没有另加一个通用的边缘模糊滤镜。装饰草会在区域色之后使用自己的点缀颜色。</p>
+<p><strong>这些噪声到底是什么？</strong> 原项目用 Godot 的 FastNoiseLite 资源；网页演示改用下面的周期 value noise，组合四个不同频率的层。它们不是同一个噪声算法，所以具体斑块不会与原项目逐像素一致。上方预览显示的就是上传给 GPU 的数据，而非示意图片。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/noise.js">noise.js</a> / noise</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">fract</span> <span class="o">=</span> <span class="nx">x</span> <span class="p">=&gt;</span> <span class="nx">x</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">hash</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">fract</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="mf">127.1</span> <span class="o">+</span> <span class="nx">y</span> <span class="o">*</span> <span class="mf">311.7</span> <span class="o">+</span> <span class="nx">seed</span> <span class="o">*</span> <span class="mf">74.7</span><span class="p">)</span> <span class="o">*</span> <span class="mf">43758.5453</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">valueNoise</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">period</span><span class="p">,</span> <span class="nx">seed</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">ix</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">x</span><span class="p">),</span> <span class="nx">iy</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">fx</span> <span class="o">=</span> <span class="nx">fract</span><span class="p">(</span><span class="nx">x</span><span class="p">),</span> <span class="nx">fy</span> <span class="o">=</span> <span class="nx">fract</span><span class="p">(</span><span class="nx">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fx</span> <span class="o">=</span> <span class="nx">fx</span> <span class="o">*</span> <span class="nx">fx</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">fx</span><span class="p">);</span> <span class="nx">fy</span> <span class="o">=</span> <span class="nx">fy</span> <span class="o">*</span> <span class="nx">fy</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">fy</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">at</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">hash</span><span class="p">((</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">period</span><span class="p">)</span> <span class="o">%</span> <span class="nx">period</span><span class="p">,</span> <span class="p">(</span><span class="nx">b</span> <span class="o">+</span> <span class="nx">period</span><span class="p">)</span> <span class="o">%</span> <span class="nx">period</span><span class="p">,</span> <span class="nx">seed</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">top</span> <span class="o">=</span> <span class="nx">at</span><span class="p">(</span><span class="nx">ix</span><span class="p">,</span> <span class="nx">iy</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nx">fx</span><span class="p">)</span> <span class="o">+</span> <span class="nx">at</span><span class="p">(</span><span class="nx">ix</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">iy</span><span class="p">)</span> <span class="o">*</span> <span class="nx">fx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">bottom</span> <span class="o">=</span> <span class="nx">at</span><span class="p">(</span><span class="nx">ix</span><span class="p">,</span> <span class="nx">iy</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nx">fx</span><span class="p">)</span> <span class="o">+</span> <span class="nx">at</span><span class="p">(</span><span class="nx">ix</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">iy</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">fx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">top</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nx">fy</span><span class="p">)</span> <span class="o">+</span> <span class="nx">bottom</span> <span class="o">*</span> <span class="nx">fy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">makeNoise</span><span class="p">(</span><span class="nx">seed</span><span class="p">,</span> <span class="nx">size</span> <span class="o">=</span> <span class="mi">256</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">bytes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">(</span><span class="nx">size</span> <span class="o">*</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="nx">size</span><span class="p">;</span> <span class="nx">y</span><span class="o">++</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">size</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">weight</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">octave</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">octave</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">octave</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">period</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="nx">octave</span><span class="p">,</span> <span class="nx">amplitude</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">**</span> <span class="nx">octave</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">value</span> <span class="o">+=</span> <span class="nx">amplitude</span> <span class="o">*</span> <span class="nx">valueNoise</span><span class="p">(</span><span class="nx">x</span> <span class="o">/</span> <span class="nx">size</span> <span class="o">*</span> <span class="nx">period</span><span class="p">,</span> <span class="nx">y</span> <span class="o">/</span> <span class="nx">size</span> <span class="o">*</span> <span class="nx">period</span><span class="p">,</span> <span class="nx">period</span><span class="p">,</span> <span class="nx">seed</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">weight</span> <span class="o">+=</span> <span class="nx">amplitude</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">value</span> <span class="o">/</span> <span class="nx">weight</span> <span class="o">*</span> <span class="mi">255</span><span class="p">),</span> <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">y</span> <span class="o">*</span> <span class="nx">size</span> <span class="o">+</span> <span class="nx">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">bytes</span><span class="p">.</span><span class="nx">set</span><span class="p">([</span><span class="nx">v</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="nx">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span> <span class="nx">bytes</span><span class="p">,</span> <span class="nx">size</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>纹理以 Repeat 模式循环、线性过滤采样。周期网格让纹理首尾衔接，固定种子让图案稳定。选择「色块噪声」可检查 A 层灰度；切回最终画面，观察灰度阈值如何变成浅绿色区域。
+</section>
+</p>
+<section class="grass-step" data-step="4" aria-labelledby="grass-step-4">
+  <p class="grass-eyebrow">拆解笔记 / STEP 4</p>
+  <h2 id="grass-step-4">风动：把一张移动的噪声变成一片草浪</h2>
+
+<p><strong>本步新增：局部摇摆 + 世界风场旋转。</strong> 局部摇摆让各撮草轻微左右摆动，世界风场让一片区域的草协同倾斜。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="wind"  alt="wind：实时演示使用的纹理" width="192" height="128"><figcaption>wind</figcaption></figure>
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+</div>
+
+<p><code>wind</code> 使用独立种子 41，不复用色块噪声。色块是固定的地貌分布，风是随时间移动的场；如果两者绑定，草的运动会过度依赖颜色边界。</p>
+<p><strong>同一张风纹理采样两次。</strong> 两层沿主风向左右各偏转 10°，第二层还改变空间尺度与移动速度。两次采样相乘，加上偏置，映射到 -1～1 的旋转强度。这里与原算法保持相同的组合思路，噪声纹理与部分尺寸参数做了网页演示适配。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/common.glsl">common.glsl</a> / wind</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">windAt</span><span class="p">(</span><span class="k">vec2</span> <span class="n">rootXZ</span><span class="p">,</span> <span class="k">float</span> <span class="n">time</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec2</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="mf">0.174533</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.174533</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uWind</span><span class="p">,</span> <span class="n">rootXZ</span> <span class="o">*</span> <span class="mf">0.11</span> <span class="o">+</span> <span class="n">d1</span> <span class="o">*</span> <span class="n">time</span> <span class="o">*</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="n">uWindSpeed</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uWind</span><span class="p">,</span> <span class="n">rootXZ</span> <span class="o">*</span> <span class="mf">0.11</span> <span class="o">*</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">*</span> <span class="n">time</span> <span class="o">*</span> <span class="mf">0.025</span> <span class="o">*</span> <span class="n">uWindSpeed</span> <span class="o">*</span> <span class="mf">0.89</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="n">clamp</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="mf">0.365</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>根据风向构造垂直于它的旋转轴，再用 Rodrigues 旋转公式旋转草片偏移。世界风向固定为 XZ 平面内的 <code>(0.6, 1.0)</code>；相机转了，风向也不会跟着变成另一个世界方向。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.vert.glsl">grass.vert.glsl</a> / world-rotation</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="n">vWind</span> <span class="o">=</span> <span class="n">windAt</span><span class="p">(</span><span class="n">aRoot</span><span class="p">.</span><span class="n">xz</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">4.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">windDirection</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">windDirection</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">vWind</span> <span class="o">*</span> <span class="n">radians</span><span class="p">(</span><span class="mf">60.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">offset</span> <span class="o">=</span> <span class="n">rotateAxis</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">angle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">normal</span> <span class="o">=</span> <span class="n">rotateAxis</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">angle</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">vNormal</span> <span class="o">=</span> <span class="n">normal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">projectionMatrix</span> <span class="o">*</span> <span class="n">viewMatrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">aRoot</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>局部摇摆则是一个带随机相位的正弦，围绕相机朝向的轴摆动，代码在第二步的 <code>billboard</code> 段内。它与世界风动叠加，但不负责制造大面积的草浪。</p>
+<p><strong>组合顺序：局部摆动 → 角色拨草（第七步才启用）→ 世界风动 → 相机投影。</strong> 旋转顺序不可随意交换，因为绕不同轴的旋转一般不满足交换律。选择「风场噪声」，观察明暗团块与倾斜区域的关系；把风速设为 0 会停止风纹理流动，但局部正弦摇摆仍会继续。
+</section>
+</p>
+<section class="grass-step" data-step="5" aria-labelledby="grass-step-5">
+  <p class="grass-eyebrow">拆解笔记 / STEP 5</p>
+  <h2 id="grass-step-5">假透视：用 UV 变形补充倾倒的体积感</h2>
+
+<p><strong>本步新增：随高度变化的贴图横向缩放。</strong> 这是原实现里与“折叠感”最接近的部分，不是沿四边形对角线折叠网格，也没有增加叶片骨骼。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+  <figure><img data-texture="accentleaf" src="/demos/pixel-grass/textures/accentleaf.png" alt="accentleaf：实时演示使用的纹理" width="192" height="128"><figcaption>accentleaf</figcaption></figure>
+
+  <figure><img data-texture="wind"  alt="wind：实时演示使用的纹理" width="192" height="128"><figcaption>wind</figcaption></figure>
+
+</div>
+
+<p>先把横向 UV 中心移到 0，再根据草叶高度、风强度以及相机与风向的夹角调整宽度，最后移回 0.5。这样叶片上部会比下部更明显地收缩或展开。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.frag.glsl">grass.frag.glsl</a> / perspective</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec2</span> <span class="n">leafUV</span> <span class="o">=</span> <span class="n">vUv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">5.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec2</span> <span class="n">windDirection</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec2</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">facing</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">uCamForward</span><span class="p">.</span><span class="n">xz</span><span class="p">),</span> <span class="n">windDirection</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">taper</span> <span class="o">=</span> <span class="n">vWind</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">facing</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">7.0</span><span class="p">)</span> <span class="n">taper</span> <span class="o">-=</span> <span class="n">vPushForward</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// In this mesh UV.y=1 is the blade tip; Godot&#39;s original UV has opposite Y.</span>
+</span></span><span class="line"><span class="cl">    <span class="n">leafUV</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">leafUV</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">leafUV</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">taper</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Discard outside the sprite so the edge cannot wrap to the next tile.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">leafUV</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="o">||</span> <span class="n">leafUV</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">discard</span><span class="p">;</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>贴图组合：风噪声 → 横向 UV 变形 → 采样草叶贴图。</strong> 这一步没有新增纹理，只改变同一张草叶图的读取位置。色块仍由根部世界坐标决定，不使用变形后的草叶 UV。</p>
+<p>网页网格的 <code>UV.y = 1</code> 位于草尖，和原 Godot shader 所使用的方向不同，因此高度因子做了对应转换。越出横向边界的片元被丢弃，避免纹理另一侧重复出现。</p>
+<p>开启「对比上一步」，缓慢拖动相机，从顺风方向转到侧风方向观察：风向与视线越接近，假透视影响越明显。这个变化比较细，建议暂停后放大观察；它不应把叶片变成夸张的橡皮片。
+</section>
+</p>
+<section class="grass-step" data-step="6" aria-labelledby="grass-step-6">
+  <p class="grass-eyebrow">拆解笔记 / STEP 6</p>
+  <h2 id="grass-step-6">分帧：让草像手绘动画一样更新姿态</h2>
+
+<p><strong>本步新增：草的时间量化和随机更新相位。</strong> 默认每秒约 5 次草姿态更新，浏览器仍然正常绘制，相机拖动也不受这个更新频率限制。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="wind"  alt="wind：实时演示使用的纹理" width="192" height="128"><figcaption>wind</figcaption></figure>
+
+</div>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.vert.glsl">grass.vert.glsl</a> / stepped-time</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">time</span> <span class="o">=</span> <span class="n">uTime</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">6.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">phase</span> <span class="o">=</span> <span class="n">aSeed</span> <span class="o">/</span> <span class="n">uFps</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="n">uTime</span> <span class="o">+</span> <span class="n">phase</span><span class="p">)</span> <span class="o">*</span> <span class="n">uFps</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="n">uFps</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>每撮草用实例随机数得到 <code>phase</code>，再把时间舍入到 <code>1 / uFps</code> 的间隔。风场和局部正弦使用量化后的时间，所以它们一起产生分帧感。不同草的更新时间稍微错开，避免所有叶片在同一瞬间跳动。</p>
+<p><strong>贴图组合没有增加：仍然是上一阶段的风纹理与草叶贴图。</strong> 改变的是采样噪声时使用的时间，而不是把噪声图片转成动画帧。</p>
+<p>调节草的帧率到 2、5、15，对比更新节奏；再开启「对比上一步」查看连续运动。原项目用位置生成相位，这里改用固定实例随机数，让分布更容易复现。后面加入的角色运动与云影使用连续时间，不受这个参数控制。
+</section>
+</p>
+<section class="grass-step" data-step="7" aria-labelledby="grass-step-7">
+  <p class="grass-eyebrow">拆解笔记 / STEP 7</p>
+  <h2 id="grass-step-7">角色拨草：用距离场把草向外推开</h2>
+
+<p><strong>本步新增：深色球体角色、距离衰减和两个方向的拨草旋转。</strong> 球体只用于展示交互，不是原项目的人物或 Logo。它沿固定路径运动，便于反复比较。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/main.js">main.js</a> / actor-path</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// Same analytic path in all stages; pausing freezes it together with wind/clouds.
+</span></span></span><span class="line"><span class="cl">  <span class="nx">actor</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">elapsed</span><span class="o">*</span><span class="p">.</span><span class="mi">43</span><span class="p">)</span><span class="o">*</span><span class="mf">3.8</span><span class="p">,.</span><span class="mi">38</span><span class="p">,</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">elapsed</span><span class="o">*</span><span class="p">.</span><span class="mi">67</span><span class="p">)</span><span class="o">*</span><span class="mf">2.9</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">uniforms</span><span class="p">.</span><span class="nx">uActor</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">actor</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">actor</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">z</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>草根到角色的距离除以作用半径，得到归一化距离；半径外影响为零，越靠近中心影响越强。向量方向分别投影到相机的横向和地面上的前后方向，再转换成左右与前后两个旋转。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/grass.vert.glsl">grass.vert.glsl</a> / displacement</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="n">vPushForward</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">7.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec2</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">aRoot</span><span class="p">.</span><span class="n">xz</span> <span class="o">-</span> <span class="n">uActor</span><span class="p">.</span><span class="n">xz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">distanceToActor</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">delta</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">strength</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">distanceToActor</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">uRadius</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)),</span> <span class="mf">0.9</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec2</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">distanceToActor</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">forward</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="n">uCamForward</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">uCamForward</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">side</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="n">direction</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="n">direction</span><span class="p">.</span><span class="n">y</span><span class="p">),</span><span class="n">uCamRight</span><span class="p">)</span> <span class="o">*</span> <span class="n">strength</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">front</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="n">direction</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="n">direction</span><span class="p">.</span><span class="n">y</span><span class="p">),</span><span class="n">forward</span><span class="p">)</span> <span class="o">*</span> <span class="n">strength</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">offset</span> <span class="o">=</span> <span class="n">rotateAxis</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">uCamForward</span><span class="p">,</span> <span class="o">-</span><span class="n">side</span> <span class="o">*</span> <span class="n">radians</span><span class="p">(</span><span class="mf">60.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">offset</span> <span class="o">=</span> <span class="n">rotateAxis</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">uCamRight</span><span class="p">,</span> <span class="n">front</span> <span class="o">*</span> <span class="n">radians</span><span class="p">(</span><span class="mf">62.7</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">normal</span> <span class="o">=</span> <span class="n">rotateAxis</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">uCamRight</span><span class="p">,</span> <span class="n">front</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vPushForward</span> <span class="o">=</span> <span class="n">front</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>代码对零距离、半径和幂函数输入做了保护，避免中心点归一化或负数小数次幂产生无效值。拨草之后继续叠加原有风动，<code>vPushForward</code> 还会传到第五步的 UV 假透视中，使前后倾倒具有相应的形状变化。</p>
+<p><strong>贴图组合：沿用草叶、底色色块、风场；角色影响由坐标计算，不新增交互贴图。</strong> 原项目支持一个角色位置数组，并用脚本约 10 Hz 传递位置；本网页演示使用一个角色，位置每帧传入，便于聚焦算法。</p>
+<p>调大「拨草范围」观察影响区域。这不是物理模拟：角色离开后，当前位置影响归零，草回到风动决定的姿态；没有持续的踩踏印记，也没有弹簧回弹状态。
+</section>
+</p>
+<section class="grass-step" data-step="8" aria-labelledby="grass-step-8">
+  <p class="grass-eyebrow">拆解笔记 / STEP 8</p>
+  <h2 id="grass-step-8">卡通光照：把连续亮度组织成有限色阶</h2>
+
+<p><strong>本步新增：方向光、有限明暗色阶和草片的窄范围过渡。</strong> 第三步解决“物体本身是什么颜色”，这一步解决“它受到多少光”。两者不能混成同一种色块处理。</p>
+<p>核心先计算法线与光方向的点积，再量化到有限亮度级别。地面保持硬分界；草片在每个级别的边界附近用 <code>smoothstep</code> 留出一小段过渡，这对应原项目的 Hybrid Toon Shading 思路。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/common.glsl">common.glsl</a> / lighting</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">shadeGrass</span><span class="p">(</span><span class="k">vec3</span> <span class="n">color</span><span class="p">,</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">,</span> <span class="k">vec3</span> <span class="n">root</span><span class="p">,</span> <span class="k">float</span> <span class="n">isBlade</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&lt;</span> <span class="mf">8.0</span><span class="p">)</span> <span class="k">return</span> <span class="n">color</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">lightDirection</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">normal</span><span class="p">),</span> <span class="n">lightDirection</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uStage</span> <span class="o">&gt;=</span> <span class="mf">9.0</span><span class="p">)</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">diffuse</span><span class="p">,</span> <span class="n">cloudAt</span><span class="p">(</span><span class="n">root</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">stepSize</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">uCuts</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">level</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="n">diffuse</span> <span class="o">*</span> <span class="n">uCuts</span><span class="p">)</span> <span class="o">*</span> <span class="n">stepSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Ground keeps hard bands. Blades blend over a narrow region at each boundary.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">isBlade</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">boundary</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">diffuse</span> <span class="o">/</span> <span class="n">stepSize</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">stepSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">halfWidth</span> <span class="o">=</span> <span class="n">stepSize</span> <span class="o">*</span> <span class="mf">0.255</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">level</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="n">boundary</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">boundary</span> <span class="o">+</span> <span class="n">stepSize</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">smoothstep</span><span class="p">(</span><span class="n">boundary</span><span class="o">-</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">boundary</span><span class="o">+</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">diffuse</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Web adaptation: small ambient term keeps the darkest band readable.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">color</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.35</span> <span class="o">+</span> <span class="mf">0.65</span> <span class="o">*</span> <span class="n">clamp</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>贴图组合：第三步得到的底色 × 本步计算的光照强度。</strong> 此时没有新增光照贴图，也还没有云影。叶片透明轮廓继续生效。</p>
+<p>原项目用 <code>LIGHT_VERTEX = model_origin</code> 统一一撮草的光照位置。网页版本同样把根部传给光照函数；但没有复刻 Godot 的完整灯光、阴影与法线管线，而是使用向上的基础法线，随风动轻微倾斜，并增加少量环境亮度。这些调整让算法在独立浏览器示例中更容易观察，不应理解成与原画面严格一致。</p>
+<p>调节「光照色阶」，注意颜色数量变化。静止的平坦地面法线一致，所以在这一阶段可能整块地面明暗接近；下一步云影加入后，同一地面上会出现空间变化的明暗区域。
+</section>
+</p>
+<section class="grass-step" data-step="9" aria-labelledby="grass-step-9">
+  <p class="grass-eyebrow">拆解笔记 / STEP 9</p>
+  <h2 id="grass-step-9">云影：把移动的天空映射到世界</h2>
+
+<p><strong>本步新增：假想云层高度、云噪声投影与动态光照遮罩。</strong> 并不绘制三维云朵，而是计算“这块地面对应云层的哪里”，再采样那里有多少遮挡。</p>
+<div class="grass-textures">
+
+  <figure><img data-texture="cloud"  alt="cloud：实时演示使用的纹理" width="192" height="128"><figcaption>cloud</figcaption></figure>
+
+  <figure><img data-texture="wind"  alt="wind：实时演示使用的纹理" width="192" height="128"><figcaption>wind</figcaption></figure>
+
+  <figure><img data-texture="patch-a"  alt="patch-a：实时演示使用的纹理" width="192" height="128"><figcaption>patch-a</figcaption></figure>
+
+  <figure><img data-texture="patch-b"  alt="patch-b：实时演示使用的纹理" width="192" height="128"><figcaption>patch-b</figcaption></figure>
+
+</div>
+
+<p>沿光照方向，从草根或地面位置求出与云层平面的交点。再用交点 XZ 坐标读取两层移动云噪声：两层方向略有分离，尺度和速度也不相同。乘积经阈值、对比度和最小亮度处理后，得到光照上限。</p>
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/pixel-grass/common.glsl">common.glsl</a> / clouds</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">cloudAt</span><span class="p">(</span><span class="k">vec3</span> <span class="n">worldPosition</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">lightDirection</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">8.0</span> <span class="o">-</span> <span class="n">worldPosition</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">lightDirection</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">hit</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldPosition</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">lightDirection</span><span class="p">).</span><span class="n">xz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="mf">0.349066</span><span class="p">),</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.349066</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uCloud</span><span class="p">,</span> <span class="n">hit</span> <span class="o">/</span> <span class="mf">12.0</span> <span class="o">+</span> <span class="n">d1</span> <span class="o">*</span> <span class="n">uTime</span> <span class="o">*</span> <span class="mf">0.018</span> <span class="o">*</span> <span class="n">uCloudSpeed</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uCloud</span><span class="p">,</span> <span class="n">hit</span> <span class="o">/</span> <span class="mf">12.0</span> <span class="o">*</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="n">d2</span> <span class="o">*</span> <span class="n">uTime</span> <span class="o">*</span> <span class="mf">0.018</span> <span class="o">*</span> <span class="n">uCloudSpeed</span> <span class="o">*</span> <span class="mf">0.89</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">lightValue</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">clamp</span><span class="p">((</span><span class="n">lightValue</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">3.845</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>第八步的 <code>shadeGrass()</code> 使用 <code>min(diffuse, cloudAt(root))</code> 让云影限制直射光，再执行色阶处理。因此阴影也进入了卡通明暗系统，而不是在最终画面上叠一张半透明黑图。</p>
+<table>
+	<thead>
+			<tr>
+					<th>纹理</th>
+					<th>坐标与时间</th>
+					<th>最终控制什么</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>grassleaf</code> / <code>accentleaf</code></td>
+					<td>草片 UV，经过假透视变形</td>
+					<td>叶片轮廓与局部纹理明暗</td>
+			</tr>
+			<tr>
+					<td><code>patch-a</code> / <code>patch-b</code></td>
+					<td>固定世界 XZ 坐标</td>
+					<td>地面和草的区域颜色</td>
+			</tr>
+			<tr>
+					<td><code>wind</code></td>
+					<td>草根世界 XZ + 分帧时间偏移</td>
+					<td>旋转角度与假透视强度</td>
+			</tr>
+			<tr>
+					<td><code>cloud</code></td>
+					<td>投影到云层的世界坐标 + 连续时间偏移</td>
+					<td>地面和草的光照上限</td>
+			</tr>
+	</tbody>
+</table>
+<p><strong>四种空间关系，最后汇成一个画面：</strong> 世界坐标让颜色和风场附着在场景里；草叶 UV 保持叶片轮廓；相机基向量维持草片朝向；光照方向将云层投影到地面。</p>
+<p>选择「云影遮罩」单独观察明暗场，再切回最终画面。将风速设为 0、保持云速，区分“叶片运动”和“光照运动”；将云速设为 0，则云影停在原处。暂停按钮会同时冻结草、角色与云的时间，但仍能拖动相机检查它们的空间关系。</p>
+<p>这就是最终组合。它没有加入人物描边、后处理法线描边或永久踩踏痕迹，这些不属于本篇九个阶段的实现范围。
+</section>
+</p>
+<hr>
+<p><strong>源码与素材说明</strong></p>
+<p>所有步骤共用一套实时场景，代码面板由 Hugo 直接摘录演示源文件中的标记段落，修改实现后会同步更新。完整入口：<a href="/demos/pixel-grass/main.js">main.js</a>；共用算法：<a href="/demos/pixel-grass/common.glsl">common.glsl</a>；噪声生成：<a href="/demos/pixel-grass/noise.js">noise.js</a>；<a href="/demos/pixel-grass/CREDITS.md">完整署名与改动记录</a>。</p>
+<p>Grass assets by <strong>Dylearn</strong>。草叶贴图依据 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 使用，原文件未修改；shader 算法依据 MIT 许可改写，<a href="https://github.com/DylearnDev/Dylearn-3D-Pixel-Art-Grass-Demo">原项目与许可</a>。未使用 Waterfowl Logo 或品牌素材。网页噪声、实例分布、草片支点、光照与角色路径均有教学适配；Three.js 0.180.0 使用 MIT 许可。</p>
+
+  </div>
+</article>
+
+    </main></div><script>
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      if (themeBtn) {
+        var dark = theme === "dark";
+        themeBtn.setAttribute("aria-label", dark ? "切换浅色主题" : "切换深色主题");
+      }
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+    }
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+    var headings = [];
+    tocLinks.forEach(function (link) {
+      var id = decodeURIComponent((link.getAttribute("href") || "").replace(/^#/, ""));
+      var heading = id ? document.getElementById(id) : null;
+      if (heading) headings.push({ heading: heading, link: link });
+    });
+    if (headings.length && "IntersectionObserver" in window) {
+      var active = null;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          if (active) active.classList.remove("is-active");
+          var match = headings.filter(function (item) { return item.heading === entry.target; })[0];
+          if (match) {
+            match.link.classList.add("is-active");
+            active = match.link;
+          }
+        });
+      }, { rootMargin: "-64px 0px -70% 0px", threshold: 0.1 });
+      headings.forEach(function (item) { observer.observe(item.heading); });
+    }
+  })();
+</script>
+<script defer src="/js/code-blocks.js"></script>
+</body>
+
+</html>

@@ -7,80 +7,21 @@
 <link rel="shortcut icon" href="http://huyuqwqovo.top/images/favicon.png" />
 <title>如何部署一个类似此网页的个人网站 | huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
 <meta name="title" content="如何部署一个类似此网页的个人网站" />
-<meta name="description" content="使用hugo模板将个人网站部署在netlify上
-如果你需要快速搭建一个个人网站，你可以参考本文章
-本部署方式参考了【大学生提高课】3 hexo与hugo博客搭建与github自动化推送和服务器推送
-感谢他的教程让我成功用此方法成功搭建了个人网站，如果你看不懂我的文字版，你可以看他的视频版
-首先打开hugo官网,如果需要更详细的信息，你可以在这个官网上查看
-点击中间的getting started
-
-然后依次点击quick start，install hugo
-根据你电脑的系统选择并安装对应的版本
-(其实我是直接在GitHub上搜索hugo并安装的)github上的hugo（写到一半才想起来我是这么安装的）
-下面是如何在GitHub上安装hugo
-进入GitHub上的hugo后点击右侧的releases，选择要下载的版本，请下载extended版本的
-extended自带所需的sass
-windows下载下图所示版本
-
-将zip文件解压，将hugo.exe文件所在的目录添加到环境变量
-如何添加环境变量？
-简易版
-[深度了解版](Windows 中的环境变量（Windows11 为例）_win11环境变量-CSDN博客)
-在你准备好的文件夹中打开命令行（在空白处点击右键选择在终端中打开）输入以下命令
-hugo new site blod
-此时在这个文件夹下将会创建一个blog文件夹
-到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题
-回到hugo主页点击左上角的Themes
-
-
-在这里你可以为你的个人网站选择一个预设好的主题
-我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范
-
-点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip
-
-下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master
-复制\blog\themes\hugo-texify3中的layouts文件夹到blog中
-复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中
-如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹
-在当前文件夹目录下打开终端输入
-hugo
-观察是否报错
-然后运行以下命令来启动服务
-hugo serve
-至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署）
-接下来你需要将这个文件夹使用git传到github上，注意要设置为public
-接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目
-这里填写你的网站地址（不过很容易重名）
-
-注意选择正确的分支（main或者master）
-然后点击deploy html
-以下是hugo博客目录下各文件夹的作用
-my-hugo-blog/
-├── archetypes/         # 内容模板的原型
-├── content/            # 你所有的博客文章、页面等
-├── data/               # 数据文件 (JSON, YAML, TOML)
-├── layouts/            # 网站的 HTML 模板
-├── static/             # 静态文件 (CSS, JS, 图片等)
-├── themes/             # 你下载的主题存放处
-└── config.toml         # 网站的全局配置文件" />
-<meta name="keywords" content="部署," />
+<meta name="description" content="从本地预览到自动发布：用 Hugo、GitHub 和 Netlify 搭建一个可以持续写作、也能嵌入交互演示的个人博客。" />
+<meta name="keywords" content="部署,Hugo," />
 
 
 <meta property="og:url" content="http://huyuqwqovo.top/%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E7%B1%BB%E4%BC%BC%E6%AD%A4%E7%BD%91%E9%A1%B5%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/">
 	<meta property="og:site_name" content="huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog">
 	<meta property="og:title" content="如何部署一个类似此网页的个人网站">
-	<meta property="og:description" content="使用hugo模板将个人网站部署在netlify上 如果你需要快速搭建一个个人网站，你可以参考本文章 本部署方式参考了【大学生提高课】3 hexo与hugo博客搭建与github自动化推送和服务器推送 感谢他的教程让我成功用此方法成功搭建了个人网站，如果你看不懂我的文字版，你可以看他的视频版
-首先打开hugo官网,如果需要更详细的信息，你可以在这个官网上查看 点击中间的getting started 然后依次点击quick start，install hugo 根据你电脑的系统选择并安装对应的版本 (其实我是直接在GitHub上搜索hugo并安装的)github上的hugo（写到一半才想起来我是这么安装的） 下面是如何在GitHub上安装hugo 进入GitHub上的hugo后点击右侧的releases，选择要下载的版本，请下载extended版本的 extended自带所需的sass windows下载下图所示版本 将zip文件解压，将hugo.exe文件所在的目录添加到环境变量 如何添加环境变量？ 简易版 [深度了解版](Windows 中的环境变量（Windows11 为例）_win11环境变量-CSDN博客) 在你准备好的文件夹中打开命令行（在空白处点击右键选择在终端中打开）输入以下命令
-hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
-hugo 观察是否报错 然后运行以下命令来启动服务
-hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
+	<meta property="og:description" content="从本地预览到自动发布：用 Hugo、GitHub 和 Netlify 搭建一个可以持续写作、也能嵌入交互演示的个人博客。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="blog">
 		<meta property="article:published_time" content="2025-03-26T18:45:30+08:00">
-		<meta property="article:modified_time" content="2025-03-26T18:45:30+08:00">
+		<meta property="article:modified_time" content="2026-11-09T00:00:00+08:00">
 		<meta property="article:tag" content="部署">
+		<meta property="article:tag" content="Hugo">
 		<meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
 
 
@@ -89,28 +30,18 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:image" content="http://huyuqwqovo.top/images/share.png">
 	<meta name="twitter:title" content="如何部署一个类似此网页的个人网站">
-	<meta name="twitter:description" content="使用hugo模板将个人网站部署在netlify上 如果你需要快速搭建一个个人网站，你可以参考本文章 本部署方式参考了【大学生提高课】3 hexo与hugo博客搭建与github自动化推送和服务器推送 感谢他的教程让我成功用此方法成功搭建了个人网站，如果你看不懂我的文字版，你可以看他的视频版
-首先打开hugo官网,如果需要更详细的信息，你可以在这个官网上查看 点击中间的getting started 然后依次点击quick start，install hugo 根据你电脑的系统选择并安装对应的版本 (其实我是直接在GitHub上搜索hugo并安装的)github上的hugo（写到一半才想起来我是这么安装的） 下面是如何在GitHub上安装hugo 进入GitHub上的hugo后点击右侧的releases，选择要下载的版本，请下载extended版本的 extended自带所需的sass windows下载下图所示版本 将zip文件解压，将hugo.exe文件所在的目录添加到环境变量 如何添加环境变量？ 简易版 [深度了解版](Windows 中的环境变量（Windows11 为例）_win11环境变量-CSDN博客) 在你准备好的文件夹中打开命令行（在空白处点击右键选择在终端中打开）输入以下命令
-hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
-hugo 观察是否报错 然后运行以下命令来启动服务
-hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
+	<meta name="twitter:description" content="从本地预览到自动发布：用 Hugo、GitHub 和 Netlify 搭建一个可以持续写作、也能嵌入交互演示的个人博客。">
 
 
 
 
 	<meta itemprop="name" content="如何部署一个类似此网页的个人网站">
-	<meta itemprop="description" content="使用hugo模板将个人网站部署在netlify上 如果你需要快速搭建一个个人网站，你可以参考本文章 本部署方式参考了【大学生提高课】3 hexo与hugo博客搭建与github自动化推送和服务器推送 感谢他的教程让我成功用此方法成功搭建了个人网站，如果你看不懂我的文字版，你可以看他的视频版
-首先打开hugo官网,如果需要更详细的信息，你可以在这个官网上查看 点击中间的getting started 然后依次点击quick start，install hugo 根据你电脑的系统选择并安装对应的版本 (其实我是直接在GitHub上搜索hugo并安装的)github上的hugo（写到一半才想起来我是这么安装的） 下面是如何在GitHub上安装hugo 进入GitHub上的hugo后点击右侧的releases，选择要下载的版本，请下载extended版本的 extended自带所需的sass windows下载下图所示版本 将zip文件解压，将hugo.exe文件所在的目录添加到环境变量 如何添加环境变量？ 简易版 [深度了解版](Windows 中的环境变量（Windows11 为例）_win11环境变量-CSDN博客) 在你准备好的文件夹中打开命令行（在空白处点击右键选择在终端中打开）输入以下命令
-hugo new site blod 此时在这个文件夹下将会创建一个blog文件夹 到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题 回到hugo主页点击左上角的Themes 在这里你可以为你的个人网站选择一个预设好的主题 我将使用[TeXify3](TeXify3 | Hugo Themes)这个主题来做示范 点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip 下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master 复制\blog\themes\hugo-texify3中的layouts文件夹到blog中 复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中 如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹 在当前文件夹目录下打开终端输入
-hugo 观察是否报错 然后运行以下命令来启动服务
-hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署） 接下来你需要将这个文件夹使用git传到github上，注意要设置为public 接下来进入netlify官网点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目 这里填写你的网站地址（不过很容易重名） 注意选择正确的分支（main或者master） 然后点击deploy html
-以下是hugo博客目录下各文件夹的作用 my-hugo-blog/ ├── archetypes/ # 内容模板的原型 ├── content/ # 你所有的博客文章、页面等 ├── data/ # 数据文件 (JSON, YAML, TOML) ├── layouts/ # 网站的 HTML 模板 ├── static/ # 静态文件 (CSS, JS, 图片等) ├── themes/ # 你下载的主题存放处 └── config.toml # 网站的全局配置文件">
+	<meta itemprop="description" content="从本地预览到自动发布：用 Hugo、GitHub 和 Netlify 搭建一个可以持续写作、也能嵌入交互演示的个人博客。">
 	<meta itemprop="datePublished" content="2025-03-26T18:45:30+08:00">
-	<meta itemprop="dateModified" content="2025-03-26T18:45:30+08:00">
-	<meta itemprop="wordCount" content="97">
+	<meta itemprop="dateModified" content="2026-11-09T00:00:00+08:00">
+	<meta itemprop="wordCount" content="532">
 	<meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
-	<meta itemprop="keywords" content="部署">
+	<meta itemprop="keywords" content="部署,Hugo">
 <meta name="referrer" content="no-referrer-when-downgrade" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/300.css">
@@ -472,6 +403,8 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
     .post-row { gap: 8px 12px; }
   }
 </style>
+<link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/code-blocks.css">
 </head>
 
 <body><header class="topbar"><div class="topbar-inner">
@@ -502,67 +435,218 @@ hugo serve 至此你应该得到了一个在本地运行的个人网站（笔者
       
       <li>部署</li>
       
+      <li>Hugo</li>
+      
     </ul>
     
   </header>
   <div class="doc-body">
-    <h2 id="使用hugo模板将个人网站部署在netlify上">使用hugo模板将个人网站部署在netlify上</h2>
-<p>如果你需要快速搭建一个个人网站，你可以参考本文章
-本部署方式参考了<a href="https://www.bilibili.com/video/BV1fNNreEEDi/?share_source=copy_web&amp;vd_source=ecd7f513b1ac57f117e031c24409fa44">【大学生提高课】3 hexo与hugo博客搭建与github自动化推送和服务器推送</a>
-感谢他的教程让我成功用此方法成功搭建了个人网站，如果你看不懂我的文字版，你可以看他的视频版</p>
-<p>首先打开<a href="https://gohugo.io/">hugo官网</a>,如果需要更详细的信息，你可以在这个官网上查看
-点击中间的getting started
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250326191421042.png" alt="image.png">
-然后依次点击quick start，install hugo
-根据你电脑的系统选择并安装对应的版本
-(其实我是直接在GitHub上搜索hugo并安装的)<a href="https://github.com/gohugoio/hugo">github上的hugo</a>（写到一半才想起来我是这么安装的）
-下面是如何在GitHub上安装hugo
-进入GitHub上的hugo后点击右侧的releases，选择要下载的版本，请下载extended版本的
-extended自带所需的sass
-windows下载下图所示版本
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250326192604139.png" alt="image.png">
-将zip文件解压，将hugo.exe文件所在的目录添加到环境变量
-<strong>如何添加环境变量？</strong>
-<a href="%5Bwin10%E7%B3%BB%E7%BB%9F%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F-CSDN%E5%8D%9A%E5%AE%A2%5D(https://blog.csdn.net/qq_42535133/article/details/105373924)">简易版</a>
-[深度了解版](<a href="https://blog.csdn.net/weixin_65032328/article/details/136580118">Windows 中的环境变量（Windows11 为例）_win11环境变量-CSDN博客</a>)
-在你准备好的文件夹中打开命令行（在空白处点击右键选择在终端中打开）输入以下命令</p>
-<pre tabindex="0"><code>hugo new site blod
-</code></pre><p>此时在这个文件夹下将会创建一个blog文件夹
-到此为止最基础的工作已经完成了，我们已经拥有了一个个人网站的模板，接下来我们要为我们的网站选择一个主题
-回到<a href="https://gohugo.io/">hugo主页</a>点击左上角的Themes
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/20250326185833157.png" alt="image.png">
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/20250326185913351.png" alt="image.png">
-在这里你可以为你的个人网站选择一个预设好的主题
-我将使用[TeXify3](<a href="https://themes.gohugo.io/themes/hugo-texify3/">TeXify3 | Hugo Themes</a>)这个主题来做示范
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250326190340499.png" alt="image.png">
-点击download按钮会跳转到主题的GitHub页面，点击code，点击download zip
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250326190939952.png" alt="image.png"></p>
-<p>下载并解压源码，将源码文件整个放入之前用命令行创建的blog文件夹下的theme文件夹中，删除hugo-texify3-master文件的后缀-master
-复制\blog\themes\hugo-texify3中的layouts文件夹到blog中
-复制\blog\themes\hugo-texify3\exampleSite中的所有文件到blog中
-如果你有vscode或者类似的编辑器，用编辑器打开blog文件夹
-在当前文件夹目录下打开终端输入</p>
-<pre tabindex="0"><code class="language-terminal" data-lang="terminal">hugo
-</code></pre><p>观察是否报错
-然后运行以下命令来启动服务</p>
-<pre tabindex="0"><code>hugo serve
-</code></pre><p>至此你应该得到了一个在本地运行的个人网站（笔者使用此主题部署时发生了报错😭不过别的主题可以成功部署）
-接下来你需要将这个文件夹使用git传到github上，注意要设置为public
-接下来进入<a href="https://www.netlify.com/">netlify官网</a>点击get started，点击add new site，使用github部署，然后选择刚刚传上去的项目
-这里填写你的网站地址（不过很容易重名）
-<img src="https://raw.githubusercontent.com/zzz-k-k/picture/main/buildblog/20250327002239989.png" alt="image.png">
-注意选择正确的分支（main或者master）
-然后点击deploy html</p>
-<p>以下是hugo博客目录下各文件夹的作用
-my-hugo-blog/
-├── archetypes/         # 内容模板的原型
-├── content/            # 你所有的博客文章、页面等
-├── data/               # 数据文件 (JSON, YAML, TOML)
-├── layouts/            # 网站的 HTML 模板
-├── static/             # 静态文件 (CSS, JS, 图片等)
-├── themes/             # 你下载的主题存放处
-└── config.toml         # 网站的全局配置文件</p>
-<p><strong>大功告成，你获得了自己的网站</strong>🥳🥳🥳</p>
+    <p>搭建这个博客，核心是三件事：<strong>把文章写成 Markdown，让 Hugo 生成网页，再把网页交给托管服务。</strong> 平时写作不需要维护数据库，也不需要在服务器上一直运行 Hugo。</p>
+<p>本文使用 <strong>Hugo + Bear Blog 主题 + GitHub + Netlify</strong>，先在本地跑通，再配置自动发布。本站在 Bear Blog 基础上修改了布局、配色、代码块与交互演示，直接安装主题会得到它的基础样式。</p>
+<blockquote>
+<p>本文于 2026 年 11 月重新整理。旧版中不完整的主题安装过程、失效的嵌套链接和依赖旧界面的截图，已改为可以对照执行的步骤。示例配置以本次本地验证的 Hugo 0.169.0 为基准；以后使用其他版本时，让本地和构建环境保持一致。</p>
+</blockquote>
+<h2 id="1-先理解文件是怎样变成网站的">1. 先理解文件是怎样变成网站的</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Markdown 文章 + Hugo 模板 + 图片、CSS、JavaScript
+</span></span><span class="line"><span class="cl">                       ↓ hugo
+</span></span><span class="line"><span class="cl">                 public/ 静态网页
+</span></span><span class="line"><span class="cl">                       ↓ 托管服务
+</span></span><span class="line"><span class="cl">                 访客浏览器打开网站
+</span></span></code></pre></div><p>Hugo 只在构建时运行。<code>hugo server</code> 用于本地预览；正式发布时运行 <code>hugo</code>，再发布生成的 <code>public/</code>。两者的用途不同，不要把开发服务器当成正式部署方式。</p>
+<p>静态网站也可以有交互。本站的<a href="/pixel-grass/">像素草地拆解</a>就是文章、JavaScript 和 WebGL 的组合：服务器提供文件，访客浏览器负责运行演示。</p>
+<h2 id="2-安装工具确认终端能找到它们">2. 安装工具，确认终端能找到它们</h2>
+<p>需要安装 Hugo、Git，以及用于登录和创建远端仓库的 GitHub CLI。安装方式见 <a href="https://gohugo.io/installation/">Hugo 安装文档</a>、<a href="https://git-scm.com/downloads">Git 下载页</a>和 <a href="https://cli.github.com/">GitHub CLI</a>。</p>
+<p>安装完成后打开一个新终端，分别执行：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo version
+</span></span><span class="line"><span class="cl">git --version
+</span></span><span class="line"><span class="cl">gh --version
+</span></span></code></pre></div><p>三个命令都应输出版本。如果出现“command not found”或“不是内部或外部命令”，先检查可执行文件所在目录是否加入 PATH，并重新打开终端。Windows 手动解压 Hugo 时，加入 PATH 的是包含 <code>hugo.exe</code> 的目录。</p>
+<p>不同主题对 Hugo 版本和 Sass 工具有不同要求，应先看主题文档；不要把“安装某个版本”当成能解决所有主题报错的办法。本教程使用的基础 Bear Blog 主题不需要先安装一套 Node.js 构建工具。</p>
+<h2 id="3-创建博客添加主题">3. 创建博客，添加主题</h2>
+<p>下面的命令用于<strong>创建一个新博客</strong>。如果你已经有自己的仓库，就在现有仓库中继续，不要再次执行新建命令覆盖文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo new site my-blog
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> my-blog
+</span></span><span class="line"><span class="cl">git init -b main
+</span></span></code></pre></div><p><code>my-blog</code> 是本地目录名，可以自己修改。新版 Hugo 也可以使用 <code>hugo new project my-blog</code>；<code>site</code> 是兼容别名。</p>
+<p>先确认 GitHub 登录状态。如果还没登录，执行 <code>gh auth login</code>，按终端提示通过浏览器完成授权。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gh auth status
+</span></span></code></pre></div><p>将 <a href="https://github.com/janraasch/hugo-bearblog">Hugo Bear Blog</a>添加为 Git 子模块：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule add https://github.com/janraasch/hugo-bearblog.git themes/hugo-bearblog
+</span></span></code></pre></div><p>以后在另一台电脑拉取这个新仓库时，需要同时取得主题：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git submodule update --init --recursive
+</span></span></code></pre></div><p>Hugo 会自动读取主题的模板，<strong>不需要把主题的整个 <code>layouts/</code> 复制到项目根目录</strong>。需要定制哪一个模板，再复制并修改对应文件，能避免不必要的模板覆盖。</p>
+<h2 id="4-配置站点并写第一篇文章">4. 配置站点并写第一篇文章</h2>
+<p>在新项目的 <code>hugo.toml</code> 中设置最基本的信息。<code>example.org</code> 是占位域名，获得实际地址后需要替换。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">baseURL</span> <span class="p">=</span> <span class="s2">&#34;https://example.org/&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">title</span> <span class="p">=</span> <span class="s2">&#34;我的个人博客&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">languageCode</span> <span class="p">=</span> <span class="s2">&#34;zh-CN&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">theme</span> <span class="p">=</span> <span class="s2">&#34;hugo-bearblog&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">enableRobotsTXT</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">params</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">description</span> <span class="p">=</span> <span class="s2">&#34;记录学习、项目和日常观察。&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">permalinks</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">blog</span> <span class="p">=</span> <span class="s2">&#34;/:slug/&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">markup</span><span class="p">.</span><span class="nx">highlight</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">noClasses</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span></code></pre></div><p>这里保留 <code>languageCode</code> 是为了与本教程使用的 Bear Blog 模板一致。Hugo 0.169.0 会提示它已弃用，但仍可以构建；升级到移除该字段的版本前，需要一起迁移配置和引用 <code>.Site.LanguageCode</code> 的模板。</p>
+<p><code>noClasses = true</code> 会让 Hugo 在高亮标记中直接携带颜色，适合先确认代码块能正常显示。像本站这样需要随明暗主题切换颜色时，可以改用 <code>noClasses = false</code>，并加载对应的 Chroma CSS；只改配置而不加载样式，代码仍然会是单色。</p>
+<p>创建 <code>content/_index.md</code>，写上首页介绍：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">title = &#34;你好，我是……&#34;
+</span></span><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">这里记录我的项目、学习笔记和一些有趣的实验。
+</span></span></code></pre></div><p>然后创建首篇文章：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo new content blog/hello-world.md
+</span></span></code></pre></div><p>将生成文件的内容调整为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">title = &#34;我的第一篇博客&#34;
+</span></span><span class="line"><span class="cl">date = &#34;2026-11-08T12:00:00+08:00&#34;
+</span></span><span class="line"><span class="cl">slug = &#34;hello-world&#34;
+</span></span><span class="line"><span class="cl">draft = false
+</span></span><span class="line"><span class="cl">+++
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="gu">## 为什么开始写博客
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">把做过的事情整理下来，也给以后的自己留一份参考。
+</span></span></code></pre></div><p>日期改成自己的写作日期。<code>slug</code> 决定文章地址，这里是 <code>/hello-world/</code>；以后修改标题时，保留 <code>slug</code> 可以避免链接跟着变化。<code>draft = true</code> 的内容默认不会进入正式构建。</p>
+<h2 id="5-本地预览再检查正式构建">5. 本地预览，再检查正式构建</h2>
+<p>在包含 <code>hugo.toml</code> 的项目根目录运行：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo server --bind 127.0.0.1 --port <span class="m">1313</span> --renderToMemory
+</span></span></code></pre></div><p>打开终端显示的本地地址，通常是 <a href="http://127.0.0.1:1313/">http://127.0.0.1:1313/</a>。保持终端运行，修改 Markdown 后页面会自动刷新；按 <code>Ctrl+C</code> 停止。<code>--renderToMemory</code> 让预览输出保存在内存中，避免把带有 localhost 链接的预览文件写进 <code>public/</code>。</p>
+<p>需要预览草稿时，追加 <code>-D</code>；准备发布时仍应确认文章已设为 <code>draft = false</code>。更多参数见 <a href="https://gohugo.io/getting-started/usage/">Hugo 基本用法</a>。</p>
+<p>再执行一次正式构建：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo --minify
+</span></span></code></pre></div><p>构建成功后，确认 <code>public/index.html</code> 和文章目录存在。依次检查首页、文章、图片、代码块，以及手机宽度下的布局。终端中的 <code>ERROR</code> 需要先处理；<code>WARN</code> 也应读清具体原因，尤其是版本弃用提示。</p>
+<h2 id="6-把源码保存到-github">6. 把源码保存到 GitHub</h2>
+<p>对于本教程的“Netlify 从源码构建”流程，在项目根目录创建 <code>.gitignore</code>：</p>
+<pre tabindex="0"><code class="language-gitignore" data-lang="gitignore">/public/
+/resources/_gen/
+.hugo_build.lock
+.DS_Store
+</code></pre><p><code>public/</code> 是构建结果，可以重新生成；应维护的内容是文章、配置、模板、主题引用和静态资源。<strong>如果旧仓库已经跟踪 <code>public/</code>，新增忽略规则不会自动取消跟踪</strong>，不要直接套用到不同的发布流程。<a href="https://gohugo.io/host-and-deploy/deploy-to-netlify/">Hugo 的 Netlify 部署文档</a>也采用发布时重新构建的方式。</p>
+<p>确认暂存内容后提交：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git add .
+</span></span><span class="line"><span class="cl">git diff --cached --stat
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;建立个人博客&#34;</span>
+</span></span></code></pre></div><p>通过 GitHub CLI 创建仓库并推送：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gh repo create my-blog --private --source<span class="o">=</span>. --remote<span class="o">=</span>origin --push
+</span></span></code></pre></div><p>这条命令用于还没有远端的新项目。已有 <code>origin</code> 时直接使用现有仓库，不要再次创建。</p>
+<p>源码仓库可以保持私有；后续需要授权 Netlify 读取它。公开网站与公开源码是两件事，不必为了让别人访问博客就把所有源码公开。</p>
+<h2 id="7-让-netlify-自动构建和发布">7. 让 Netlify 自动构建和发布</h2>
+<p>本节采用<strong>Netlify 直接读取 Hugo 源码仓库</strong>的方案。在根目录新增 <code>netlify.toml</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">command</span> <span class="p">=</span> <span class="s2">&#34;hugo --minify&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">publish</span> <span class="p">=</span> <span class="s2">&#34;public&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">build</span><span class="p">.</span><span class="nx">environment</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">HUGO_VERSION</span> <span class="p">=</span> <span class="s2">&#34;0.169.0&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">TZ</span> <span class="p">=</span> <span class="s2">&#34;Asia/Shanghai&#34;</span>
+</span></span></code></pre></div><p>把 <code>HUGO_VERSION</code> 改为你已经在本地验证通过的版本，再提交这个文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git add netlify.toml
+</span></span><span class="line"><span class="cl">git commit -m <span class="s2">&#34;配置 Netlify 自动构建&#34;</span>
+</span></span><span class="line"><span class="cl">git push
+</span></span></code></pre></div><p>在 Netlify 中选择导入现有项目，连接 GitHub，并授权读取刚创建的源码仓库。核对以下内容后启动部署：</p>
+<table>
+	<thead>
+			<tr>
+					<th>设置</th>
+					<th>本教程的值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>生产分支</td>
+					<td><code>main</code></td>
+			</tr>
+			<tr>
+					<td>基础目录</td>
+					<td>项目位于仓库根目录时留空</td>
+			</tr>
+			<tr>
+					<td>构建命令</td>
+					<td><code>hugo --minify</code></td>
+			</tr>
+			<tr>
+					<td>发布目录</td>
+					<td><code>public</code></td>
+			</tr>
+			<tr>
+					<td>Hugo 版本</td>
+					<td>与本地验证版本一致</td>
+			</tr>
+	</tbody>
+</table>
+<p>关键是让 Netlify <strong>执行 Hugo，再发布 <code>public/</code></strong>，而不是把 Markdown 源码直接作为网站目录。Netlify 对 Hugo 的框架识别、版本选择和主题处理见<a href="https://docs.netlify.com/build/frameworks/framework-setup-guides/hugo/">官方说明</a>。</p>
+<p>首次部署完成后，Netlify 会给出站点地址。将它写入 <code>hugo.toml</code> 的 <code>baseURL</code>，使用完整的 HTTPS 地址和结尾斜杠，再提交、推送一次。后续推送到生产分支会触发重新构建。</p>
+<h2 id="8-使用自己的域名">8. 使用自己的域名</h2>
+<p>先用 Netlify 提供的地址确认站点正常，再在项目的域名设置中添加自己的域名。根据控制台给出的记录配置 DNS，等待解析和 HTTPS 证书就绪。不要照抄别人的 IP 或 DNS 记录，不同配置方式需要的值可能不同。</p>
+<p>域名可用后，将 <code>baseURL</code> 改为最终地址。例如本站的公开地址是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">baseURL</span> <span class="p">=</span> <span class="s2">&#34;https://huyuqwqovo.top/&#34;</span>
+</span></span></code></pre></div><p>这是本站的域名示例，搭建自己的站点时请替换。提交配置后检查文章链接、RSS、sitemap 和分享图片是否都使用新域名；仅让首页能打开，还不足以说明所有链接都正确。</p>
+<h2 id="9-本站现有流程与新站教程有什么区别">9. 本站现有流程与新站教程有什么区别</h2>
+<p>本文前面介绍的是单仓库流程。本站现有 <code>.github/workflows/deploy.yml</code> 则采用了另一种结构：源码推送到 <code>main</code> 后，GitHub Actions 执行 Hugo，再将文件推送到 <code>zzz-k-k/my_blog</code> 发布仓库。</p>
+<p>工作流中的步骤名虽然写着 “Deploy to GitHub Pages”，实际使用的 Action 也可以把文件推送到其他仓库。<strong>步骤名称不能证明网站由 GitHub Pages 托管。</strong> 本站线上响应中能看到 Netlify 和 Cloudflare 标识。</p>
+<p>维护这种结构时，需要分别确认两段是否成功：</p>
+<ol>
+<li>GitHub Actions 是否完成构建，并把本次提交对应的内容写入发布仓库。</li>
+<li>托管端是否已经更新到新的产物，公开域名是否显示新页面。</li>
+</ol>
+<p>新建博客通常不必复刻这层发布仓库。如果已经在维护旧站，则要先看实际工作流和托管配置，再决定是否调整；不要混用“源码仓库构建”与“直接发布现成产物”两套设置。</p>
+<h2 id="10-日常更新与常见问题">10. 日常更新与常见问题</h2>
+<p>以后写作的基本节奏是：编辑 <code>content/blog/</code> 中的 Markdown → 本地预览 → 正式构建检查 → 提交并推送 → 查看部署结果。</p>
+<table>
+	<thead>
+			<tr>
+					<th>现象</th>
+					<th>先检查什么</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>本地找不到主题</td>
+					<td><code>theme</code> 是否与目录名相同；主题子模块是否已初始化</td>
+			</tr>
+			<tr>
+					<td>本地正常，远端构建失败</td>
+					<td>远端 Hugo 版本、主题是否存在，以及构建日志中的第一处实际错误</td>
+			</tr>
+			<tr>
+					<td>新文章不出现</td>
+					<td><code>draft</code> 是否为 <code>true</code>；日期是否在未来；是否推送了正确分支</td>
+			</tr>
+			<tr>
+					<td>首页正常，文章或图片 404</td>
+					<td><code>baseURL</code>、文章 <code>slug</code>、资源路径与文件名大小写</td>
+			</tr>
+			<tr>
+					<td>正式页面出现 localhost</td>
+					<td>是否误发布了开发预览产物；正式发布前重新运行 Hugo</td>
+			</tr>
+			<tr>
+					<td>代码没有颜色</td>
+					<td>是否使用类名高亮却没加载 Chroma 样式；代码围栏是否注明语言</td>
+			</tr>
+			<tr>
+					<td>改了文章但线上没更新</td>
+					<td>提交是否已推送、构建是否成功、访问的是否是生产域名</td>
+			</tr>
+	</tbody>
+</table>
+<p>最后记住这些目录的分工：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">my-blog/
+</span></span><span class="line"><span class="cl">├── content/              # 文章与页面
+</span></span><span class="line"><span class="cl">├── layouts/              # 自定义模板和 shortcode
+</span></span><span class="line"><span class="cl">├── static/               # 原样发布的图片、CSS、JavaScript
+</span></span><span class="line"><span class="cl">├── themes/               # 主题
+</span></span><span class="line"><span class="cl">├── archetypes/           # 新文章的初始模板
+</span></span><span class="line"><span class="cl">├── hugo.toml             # Hugo 配置
+</span></span><span class="line"><span class="cl">├── netlify.toml          # 本教程使用的托管构建配置
+</span></span><span class="line"><span class="cl">└── public/               # 生成结果，不在这里编辑文章
+</span></span></code></pre></div><p>原版文章参考了<a href="https://www.bilibili.com/video/BV1fNNreEEDi/">《hexo 与 hugo 博客搭建与 GitHub 自动化推送》</a>。感谢这份入门资料；具体命令与部署配置应结合当前项目以及 Hugo、Netlify 的官方文档核对。</p>
 
   </div>
 </article>
@@ -570,7 +654,16 @@ my-hugo-blog/
     </main><aside class="toc" id="toc"><p class="nav-label">本页目录</p>
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#使用hugo模板将个人网站部署在netlify上">使用hugo模板将个人网站部署在netlify上</a></li>
+    <li><a href="#1-先理解文件是怎样变成网站的">1. 先理解文件是怎样变成网站的</a></li>
+    <li><a href="#2-安装工具确认终端能找到它们">2. 安装工具，确认终端能找到它们</a></li>
+    <li><a href="#3-创建博客添加主题">3. 创建博客，添加主题</a></li>
+    <li><a href="#4-配置站点并写第一篇文章">4. 配置站点并写第一篇文章</a></li>
+    <li><a href="#5-本地预览再检查正式构建">5. 本地预览，再检查正式构建</a></li>
+    <li><a href="#6-把源码保存到-github">6. 把源码保存到 GitHub</a></li>
+    <li><a href="#7-让-netlify-自动构建和发布">7. 让 Netlify 自动构建和发布</a></li>
+    <li><a href="#8-使用自己的域名">8. 使用自己的域名</a></li>
+    <li><a href="#9-本站现有流程与新站教程有什么区别">9. 本站现有流程与新站教程有什么区别</a></li>
+    <li><a href="#10-日常更新与常见问题">10. 日常更新与常见问题</a></li>
   </ul>
 </nav>
 </aside></div><script>
@@ -618,6 +711,7 @@ my-hugo-blog/
     }
   })();
 </script>
+<script defer src="/js/code-blocks.js"></script>
 </body>
 
 </html>

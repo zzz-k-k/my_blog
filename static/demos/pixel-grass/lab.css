@@ -1,0 +1,44 @@
+.grass-shell.shell.no-toc { --content-w:1120px; width:min(100%,1120px); }
+.grass-shell .doc-header { max-width:800px; }
+.grass-shell .doc-header h1 { font-size:clamp(28px,4vw,42px); }
+.grass-lab { margin:28px 0 40px; border:1px solid var(--border); }
+.grass-tabs { display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); border-bottom:1px solid var(--border); background:var(--layer); }
+.grass-tabs button { font:inherit; font-size:14px; background:none; color:var(--text-secondary); border:0; border-right:1px solid var(--border); padding:12px 4px; cursor:pointer; }
+.grass-tabs button span { display:block; font:11px var(--mono); opacity:.6; margin-bottom:5px; }
+.grass-tabs button[aria-pressed=true] { background:#315b31; color:#fff; box-shadow:inset 0 -3px #badd76; }
+.grass-tabs button:hover { background:var(--layer-hover); color:var(--text); }
+.grass-tabs button[aria-pressed=true]:hover { background:#315b31; color:#fff; }
+.grass-stage-heading { display:flex; gap:20px; align-items:center; padding:14px 20px; font-size:14px; }
+#stage-number { font:12px var(--mono); color:var(--text-helper); white-space:nowrap; }
+.grass-viewport { aspect-ratio:16/9; position:relative; background:#e6e8df; overflow:hidden; }
+#grass-canvas { display:block; width:100%; height:100%; image-rendering:pixelated; cursor:grab; touch-action:none; }
+#grass-canvas:active { cursor:grabbing; }
+#grass-status { position:absolute; top:40%; width:100%; text-align:center; padding:20px; background:#ffffffdc; color:#253126; pointer-events:none; }
+#grass-status[hidden] { display:none; }
+.grass-overlay { position:absolute; bottom:0; left:0; right:0; display:flex; justify-content:space-between; padding:10px 16px; color:#4f5e4b; font-size:11px; pointer-events:none; background:linear-gradient(transparent,#e6e8dfd9); }
+.grass-toolbar { display:flex; flex-wrap:wrap; gap:12px 18px; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); font-size:13px; }
+.grass-toolbar button,.grass-toolbar select { font:inherit; color:var(--text); background:var(--layer); border:1px solid var(--border); padding:7px 10px; cursor:pointer; }
+.grass-toolbar label { display:flex; align-items:center; gap:5px; }
+.grass-toolbar input { accent-color:#467a37; }
+.grass-tuning { padding:12px 20px; display:flex; flex-wrap:wrap; gap:16px 28px; font-size:12px; }
+.grass-tuning label { display:flex; gap:8px; align-items:center; }
+.grass-tuning label[hidden] { display:none; }
+.grass-tuning input { width:100px; accent-color:#467a37; }
+.grass-tuning output { font:11px var(--mono); min-width:30px; }
+.grass-caption { padding:8px 20px 16px; margin:0; color:var(--text-secondary); font-size:13px; }
+.grass-step { max-width:880px; margin:0 auto; }
+.grass-step[hidden] { display:none; }
+.grass-eyebrow { font:11px var(--mono); color:#6c8750; letter-spacing:2px; margin-top:32px; }
+.grass-step h2 { margin-top:10px; }
+.grass-code { margin:24px 0; min-width:0; }
+.grass-code figcaption { font:12px var(--mono); padding:10px 14px; background:var(--layer); border:1px solid var(--border); border-bottom:0; overflow-wrap:anywhere; }
+.grass-code .highlight { margin:0; font-size:13px; }
+.grass-code .highlight code { color:inherit; }
+.grass-textures { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:20px 0; }
+.grass-textures figure { margin:0; border:1px solid var(--border); background:var(--layer); }
+.grass-textures img { display:block; width:100%; height:140px; object-fit:contain; border:0; image-rendering:pixelated; background:repeating-conic-gradient(#b4b9ac 0% 25%,#d9ddcf 0% 50%) 50% / 16px 16px; }
+.grass-textures img[data-texture^=patch],.grass-textures img[data-texture=wind],.grass-textures img[data-texture=cloud] { object-fit:cover; image-rendering:auto; }
+.grass-textures figcaption { padding:8px 12px; font:12px var(--mono); }
+.grass-footer { border-top:1px solid var(--border); margin-top:40px; padding-top:20px; font-size:13px; color:var(--text-secondary); }
+.grass-step table { font-size:14px; }
+@media(max-width:680px) { .grass-tabs { grid-template-columns:repeat(3,1fr); } .grass-tabs button { padding:8px 4px; border-bottom:1px solid var(--border); } .grass-tabs button span { display:inline; margin-right:6px; } .grass-stage-heading { padding:12px; gap:12px; } .grass-toolbar { padding:12px; gap:10px; } .grass-overlay { font-size:9px; padding:6px; } .grass-overlay span:last-child { display:none; } .grass-step th,.grass-step td { padding:8px; } }

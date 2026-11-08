@@ -13,6 +13,8 @@
   {{ end -}}
   {{- partial "custom_head.html" . -}}
   {{- partial "style.html" . -}}
+  <link rel="stylesheet" href="{{ "css/syntax.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "css/code-blocks.css" | relURL }}">
 </head>
 
 <body>
@@ -22,10 +24,11 @@
       {{- $showToc = true -}}
     {{- end -}}
   {{- end -}}
+  {{- if .Params.grass_lab -}}{{- $showToc = false -}}{{- end -}}
   <header class="topbar">
     {{- partial "header.html" . -}}
   </header>
-  <div class="shell{{ if not $showToc }} no-toc{{ end }}">
+  <div class="shell{{ if not $showToc }} no-toc{{ end }}{{ if .Params.grass_lab }} grass-shell{{ end }}">
     <main>
       {{- block "main" . }}{{- end }}
     </main>
@@ -36,6 +39,7 @@
     {{- end -}}
   </div>
   {{- partial "custom_body.html" . -}}
+  <script defer src="{{ "js/code-blocks.js" | relURL }}"></script>
 </body>
 
 </html>

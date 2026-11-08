@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="{{ "demos/pixel-grass/lab.css" | relURL }}">
+<section class="grass-lab" aria-label="像素草地交互实验">
+  <nav id="grass-tabs" class="grass-tabs" aria-label="演化阶段">
+    {{ range $i, $title := slice "底板" "草片" "色块" "风动" "假透视" "分帧" "角色拨草" "卡通光照" "云影" }}
+    <button type="button" data-stage="{{ add $i 1 }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}"><span>{{ printf "%02d" (add $i 1) }}</span>{{ $title }}</button>
+    {{ end }}
+  </nav>
+  <div class="grass-stage-heading"><span id="stage-number">01 / 09</span><strong id="stage-label">一切从一块绿色平面开始</strong></div>
+  <div class="grass-viewport" id="grass-viewport">
+    <canvas id="grass-canvas" tabindex="0" aria-label="三维草地，拖动旋转视角，方向键旋转，滚轮缩放"></canvas>
+    <div id="grass-status" role="status">正在准备草地与贴图…</div>
+    <div class="grass-overlay"><span>拖动旋转 · 滚轮缩放 · 方向键也可旋转</span><span id="grass-stats">640 × 360</span></div>
+  </div>
+  <div class="grass-toolbar">
+    <button id="grass-pause" type="button" aria-pressed="false">暂停动画</button>
+    <button id="grass-reset" type="button">重置视角</button>
+    <label><input id="grass-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="grass-pixels" type="checkbox" checked> 像素化</label>
+    <label>观察图层 <select id="grass-debug"><option value="0">最终画面</option><option value="1">色块噪声</option><option value="2">风场噪声</option><option value="3">云影遮罩</option></select></label>
+  </div>
+  <div class="grass-tuning">
+    <label data-from="2">草量 <input id="grass-density" type="range" min="1000" max="22000" step="1000" value="18000"><output>18000</output></label>
+    <label data-from="4">风速 <input id="grass-wind" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+    <label data-from="6">草的帧率 <input id="grass-fps" type="range" min="2" max="15" step="1" value="5"><output>5</output></label>
+    <label data-from="7">拨草范围 <input id="grass-radius" type="range" min="0.5" max="2" step="0.05" value="1.1"><output>1.1</output></label>
+    <label data-from="8">光照色阶 <input id="grass-cuts" type="range" min="2" max="6" step="1" value="3"><output>3</output></label>
+    <label data-from="9">云速 <input id="grass-cloud" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+  </div>
+  <p class="grass-caption" id="grass-caption">固定的三维场景，逐步加入新的机制。切换阶段会保留视角和草的位置。</p>
+  <noscript>实时演示需要 JavaScript。下方仍可阅读所有阶段、贴图说明和代码。</noscript>
+</section>
+<script type="module" src="{{ "demos/pixel-grass/main.js" | relURL }}"></script>

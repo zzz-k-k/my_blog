@@ -1,0 +1,14 @@
+{{ $file := .Get "file" }}
+{{ $region := .Get "region" }}
+{{ $source := readFile (printf "static/demos/pixel-grass/%s" $file) }}
+{{ if $region }}
+  {{ $start := printf "// BEGIN %s" $region }}
+  {{ $end := printf "// END %s" $region }}
+  {{ $parts := split $source $start }}
+  {{ if ne (len $parts) 2 }}{{ errorf "Missing or duplicate source region %s in %s" $region $file }}{{ end }}
+  {{ $source = index (split (index $parts 1) $end) 0 }}
+{{ end }}
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="{{ printf "demos/pixel-grass/%s" $file | relURL }}">{{ $file }}</a>{{ with $region }} / {{ . }}{{ end }}</figcaption>
+  {{ highlight (trim $source "\n\r ") (.Get "lang" | default "javascript") "" }}
+</figure>
