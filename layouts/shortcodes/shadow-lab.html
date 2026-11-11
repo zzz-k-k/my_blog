@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="{{ "demos/pixel-grass/lab.css" | relURL }}">
+<link rel="stylesheet" href="{{ "demos/grass-shadows/shadow.css" | relURL }}">
+<section class="grass-lab shadow-lab" aria-label="草地阴影交互实验">
+  <nav id="grass-tabs" class="grass-tabs" aria-label="阴影接入阶段">
+    {{ range $i, $title := slice "基准场景" "底板投影" "草叶接收" "动态位置" "分段光照" "环境光" "完整效果" }}
+    <button type="button" data-stage="{{ add $i 1 }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}"><span>{{ printf "%02d" (add $i 1) }}</span>{{ $title }}</button>
+    {{ end }}
+  </nav>
+  <div class="grass-stage-heading"><span id="stage-number">01 / 07</span><strong id="stage-label">在草坪上放几块立方体</strong></div>
+  <div class="grass-viewport" id="grass-viewport">
+    <canvas id="grass-canvas" tabindex="0" aria-label="阴影草坪，拖动或方向键旋转，滚轮缩放"></canvas>
+    <div id="grass-status" role="status">正在准备草坪与阴影贴图…</div>
+    <div class="grass-overlay"><span>拖动旋转 · 滚轮缩放 · 方向键旋转</span><span id="grass-stats">640 × 360</span></div>
+  </div>
+  <div class="grass-toolbar">
+    <button id="grass-pause" type="button" aria-pressed="false">暂停动画</button>
+    <button id="grass-reset" type="button">重置视角</button>
+    <label><input id="grass-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="shadow-grass" type="checkbox" checked> 显示草叶</label>
+    <label><input id="shadow-mask" type="checkbox"> 查看阴影遮罩</label>
+    <label><input id="grass-pixels" type="checkbox" checked> 像素化</label>
+  </div>
+  <div class="grass-tuning">
+    <label>太阳方向 <input id="shadow-azimuth" type="range" min="0" max="360" step="1" value="305"><output>305°</output></label>
+    <label>太阳高度 <input id="shadow-altitude" type="range" min="25" max="80" step="1" value="48"><output>48°</output></label>
+    <label>直射光 <input id="shadow-sun" type="range" min="0" max="2" step="0.05" value="1.3"><output>1.3</output></label>
+    <label data-from="5">光照色阶 <input id="shadow-cuts" type="range" min="2" max="6" step="1" value="3"><output>3</output></label>
+    <label data-from="6">环境光 <input id="shadow-ambient" type="range" min="0" max="0.8" step="0.02" value="0.22"><output>0.22</output></label>
+    <label data-from="7">阴影软边 <input id="shadow-softness" type="range" min="0" max="3" step="0.25" value="1"><output>1</output></label>
+    <label data-from="7">深度偏移 <input id="shadow-bias" type="range" min="0" max="0.006" step="0.0002" value="0.0008"><output>0.0008</output></label>
+  </div>
+  <div class="shadow-stage-tools">
+    <label><input id="shadow-wind" type="checkbox" checked> 风动</label>
+    <label><input id="shadow-actor" type="checkbox" checked> 移动小球</label>
+    <label data-from="4"><input id="shadow-root" type="checkbox"> 错误示例：按草根查阴影</label>
+    <label data-from="5"><input id="shadow-banded" type="checkbox" checked> 卡通分段</label>
+    <label data-from="7"><input id="shadow-clouds" type="checkbox" checked> 云影</label>
+  </div>
+  <p class="grass-caption" id="grass-caption">固定的草坪与物体，逐步接入阴影。</p>
+  <details class="shadow-map-panel" id="shadow-map-panel">
+    <summary>查看实际使用的光源深度图 · 1024 × 1024</summary>
+    <div class="shadow-map-content">
+      <canvas id="shadow-map" width="256" height="256" aria-label="实时光源深度图，近处黑、远处白"></canvas>
+      <div><p>这是从太阳方向绘制的深度纹理。灰度表示距离光源相机的远近，白色表示该方向未记录到遮挡物。</p><p>立方体和小球写入这张图；草叶与地面只读取它。拖动观察相机不会改变它，调整太阳方向则会改变它。</p><p id="shadow-map-note">展开时刷新预览。场景始终使用完整分辨率的深度图。</p></div>
+    </div>
+  </details>
+  <noscript>实时演示需要 JavaScript；下方仍可阅读所有步骤与代码。</noscript>
+</section>
+<script type="module" src="{{ "demos/grass-shadows/main.js" | relURL }}"></script>

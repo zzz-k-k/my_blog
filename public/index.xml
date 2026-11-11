@@ -23,6 +23,13 @@
 				<description>一盏白灯，为什么会在钻石里留下彩色亮点？并排旋转两颗宝石，用八次对照把一个像素的颜色算出来。</description>
 			</item>
 			<item>
+				<title>像素草地的阴影：从物体投影到风格化明暗</title>
+				<link>http://huyuqwqovo.top/grass-shadows/</link>
+				<pubDate>Mon, 09 Nov 2026 00:00:00 +0800</pubDate>
+				<guid>http://huyuqwqovo.top/grass-shadows/</guid>
+				<description>立方体的影子怎样落到随风摆动的草上？七个实时实验，从光源深度图到动态位置对齐，再把真实遮挡接入像素风的明暗系统。</description>
+			</item>
+			<item>
 				<title>一片草地的诞生：从绿色底板到风与云影</title>
 				<link>http://huyuqwqovo.top/pixel-grass/</link>
 				<pubDate>Sun, 08 Nov 2026 23:00:00 +0800</pubDate>

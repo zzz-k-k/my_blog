@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>阴影 on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+		<link>http://huyuqwqovo.top/blog/%E9%98%B4%E5%BD%B1/</link>
+		<description>Recent content in 阴影 on huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</description>
+		<generator>Hugo</generator>
+		<language>zh-CN</language>
+		
+		
+		
+			<copyright>Copyright © 2024, huyuxi.</copyright>
+		
+		
+			<lastBuildDate>Mon, 09 Nov 2026 00:00:00 +0800</lastBuildDate>
+		
+			<atom:link href="http://huyuqwqovo.top/blog/%E9%98%B4%E5%BD%B1/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>像素草地的阴影：从物体投影到风格化明暗</title>
+				<link>http://huyuqwqovo.top/grass-shadows/</link>
+				<pubDate>Mon, 09 Nov 2026 00:00:00 +0800</pubDate>
+				<guid>http://huyuqwqovo.top/grass-shadows/</guid>
+				<description>立方体的影子怎样落到随风摆动的草上？七个实时实验，从光源深度图到动态位置对齐，再把真实遮挡接入像素风的明暗系统。</description>
+			</item>
+	</channel>
+</rss>

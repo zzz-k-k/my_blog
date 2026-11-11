@@ -1,0 +1,11 @@
+.shadow-lab .grass-tabs { grid-template-columns:repeat(7,minmax(0,1fr)); }
+.shadow-lab .grass-tuning input { width:86px; }
+.shadow-lab .grass-toolbar label[hidden] { display:none; }
+.shadow-map-panel { margin:0; border:0; border-top:1px solid var(--border); }
+.shadow-map-panel > summary { font-size:13px; font-weight:400; background:var(--bg); }
+.shadow-map-content { display:grid; grid-template-columns:192px minmax(0,1fr); align-items:center; gap:20px; padding:12px 4px 20px; font-size:13px; color:var(--text-secondary); }
+#shadow-map { width:192px; height:192px; display:block; background:#fff; border:1px solid var(--border); image-rendering:pixelated; }
+.shadow-map-content p { margin:0 0 8px; }
+.shadow-stage-tools { display:flex; flex-wrap:wrap; gap:12px 20px; padding:10px 20px; font-size:13px; border-top:1px solid var(--border); }
+.shadow-stage-tools label[hidden] { display:none; }
+@media(max-width:680px) { .shadow-lab .grass-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); } .shadow-map-content { grid-template-columns:1fr; } #shadow-map { margin:auto; } }

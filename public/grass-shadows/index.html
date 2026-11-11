@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="http://huyuqwqovo.top/images/favicon.png" />
+<title>像素草地的阴影：从物体投影到风格化明暗 | huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+<meta name="title" content="像素草地的阴影：从物体投影到风格化明暗" />
+<meta name="description" content="在同一块动态草坪上摆放立方体，逐步理解阴影贴图、草叶接收、变形位置、卡通分段和环境光。" />
+<meta name="keywords" content="图形学,Shader,阴影," />
+
+
+<meta property="og:url" content="http://huyuqwqovo.top/grass-shadows/">
+	<meta property="og:site_name" content="huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog">
+	<meta property="og:title" content="像素草地的阴影：从物体投影到风格化明暗">
+	<meta property="og:description" content="在同一块动态草坪上摆放立方体，逐步理解阴影贴图、草叶接收、变形位置、卡通分段和环境光。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2026-11-09T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-11-09T00:00:00+08:00">
+		<meta property="article:tag" content="图形学">
+		<meta property="article:tag" content="Shader">
+		<meta property="article:tag" content="阴影">
+		<meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
+
+
+
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="http://huyuqwqovo.top/images/share.png">
+	<meta name="twitter:title" content="像素草地的阴影：从物体投影到风格化明暗">
+	<meta name="twitter:description" content="在同一块动态草坪上摆放立方体，逐步理解阴影贴图、草叶接收、变形位置、卡通分段和环境光。">
+
+
+
+
+	<meta itemprop="name" content="像素草地的阴影：从物体投影到风格化明暗">
+	<meta itemprop="description" content="在同一块动态草坪上摆放立方体，逐步理解阴影贴图、草叶接收、变形位置、卡通分段和环境光。">
+	<meta itemprop="datePublished" content="2026-11-09T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-11-09T00:00:00+08:00">
+	<meta itemprop="wordCount" content="998">
+	<meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
+	<meta itemprop="keywords" content="图形学,Shader,阴影">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.5/400.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --layer: #f4f4f4;
+    --layer-hover: #e8e8e8;
+    --text: #161616;
+    --text-secondary: #525252;
+    --text-helper: #6f6f6f;
+    --link: #0f62fe;
+    --link-hover: #0043ce;
+    --border: #e0e0e0;
+    --border-strong: #8d8d8d;
+    --selected: #e8e8e8;
+    --accent: #0f62fe;
+    --header-h: 48px;
+    --sidenav-w: 256px;
+    --toc-w: 224px;
+    --content-w: 800px;
+    --font: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #161616;
+    --layer: #262626;
+    --layer-hover: #353535;
+    --text: #f4f4f4;
+    --text-secondary: #c6c6c6;
+    --text-helper: #a8a8a8;
+    --link: #78a9ff;
+    --link-hover: #a6c8ff;
+    --border: #393939;
+    --border-strong: #6f6f6f;
+    --selected: #353535;
+    --accent: #0f62fe;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-top: var(--header-h);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a { color: var(--link); }
+  a:hover { color: var(--link-hover); }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font);
+    color: var(--text);
+    line-height: 1.3;
+    scroll-margin-top: 64px;
+  }
+
+  h1 { font-size: 40px; font-weight: 300; margin: 0 0 16px; }
+  h2 { font-size: 28px; font-weight: 400; margin: 40px 0 16px; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 8px; }
+  h4, h5, h6 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+
+  p { margin: 0 0 16px; }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 8000;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px 0 16px;
+  }
+
+  .brand {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand:hover { color: var(--text); text-decoration: none; }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover { background: var(--layer-hover); }
+
+  .theme-toggle { width: 40px; padding: 0; }
+  .theme-toggle svg { display: block; }
+  .theme-toggle .icon-sun { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, var(--content-w)) var(--toc-w);
+    justify-content: center;
+    align-items: start;
+    width: min(100%, calc(var(--content-w) + var(--toc-w)));
+    margin: 0 auto;
+  }
+
+  .shell.no-toc { grid-template-columns: minmax(0, var(--content-w)); width: min(100%, var(--content-w)); }
+
+  .toc {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow: auto;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  main { min-width: 0; padding: 32px 32px 64px; }
+
+  .nav-label {
+    margin: 16px 16px 8px;
+    color: var(--text-helper);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    background: var(--layer-hover);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a {
+    color: var(--text-secondary);
+    border-left: 1px solid var(--border);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .toc ul { list-style: none; margin: 0; padding: 0; }
+  .toc li ul a { padding-left: 32px; }
+  .toc a.is-active {
+    color: var(--link);
+    border-left: 2px solid var(--accent);
+    background: var(--layer);
+    font-weight: 600;
+  }
+
+  .doc-header { margin-bottom: 24px; }
+  .doc-body { font-size: 16px; line-height: 1.75; }
+  .doc-body > :first-child { margin-top: 0; }
+
+  .meta {
+    margin: 0;
+    color: var(--text-helper);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .section-label {
+    margin: 32px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .post-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title date"
+      "excerpt excerpt";
+    gap: 8px 16px;
+    align-items: start;
+    padding: 16px;
+    background: var(--layer);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .post-row:hover { background: var(--layer-hover); color: var(--text); text-decoration: none; }
+
+  .post-row h2 {
+    grid-area: title;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .post-row time {
+    grid-area: date;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .post-row .card-excerpt { grid-area: excerpt; }
+
+  .card-excerpt {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .tags li {
+    padding: 2px 8px;
+    background: var(--layer);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .doc-body a { color: var(--link); text-decoration: none; }
+  .doc-body a:hover { color: var(--link-hover); text-decoration: underline; }
+  .text-link { color: var(--link); text-decoration: none; }
+  .text-link:hover { text-decoration: underline; }
+
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 16px 16px 16px 20px;
+    background: var(--layer);
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  blockquote p:last-child { margin-bottom: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; }
+  th, td { border: 1px solid var(--border); padding: 12px 16px; text-align: left; vertical-align: top; }
+  th { background: var(--layer); font-weight: 600; }
+
+  code, pre, .highlight {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  code {
+    padding: 0 4px;
+    background: var(--layer);
+    color: var(--text);
+  }
+
+  pre, .highlight {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--layer);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  pre code, .highlight code { padding: 0; background: transparent; }
+
+  .highlight pre { margin: 0; padding: 0; border: 0; background: transparent; }
+
+  img { max-width: 100%; height: auto; border: 1px solid var(--border); }
+
+  details { margin: 16px 0; border: 1px solid var(--border); background: var(--bg); }
+  summary { padding: 12px 16px; background: var(--layer); font-weight: 600; cursor: pointer; }
+  details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+
+  ul, ol { margin: 0 0 16px; padding-left: 24px; }
+  li { margin: 4px 0; }
+
+  @media (max-width: 1100px) {
+    .shell, .shell.no-toc {
+      grid-template-columns: minmax(0, 1fr);
+      width: min(100%, var(--content-w));
+    }
+    .toc {
+      position: static;
+      height: auto;
+      border-left: 0;
+      border-bottom: 1px solid var(--border);
+      order: -1;
+      padding: 8px 16px 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 32px; }
+    main { padding: 24px 16px 48px; }
+    .post-row { gap: 8px 12px; }
+  }
+</style>
+<link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/code-blocks.css">
+</head>
+
+<body><header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/">huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</a>
+  <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="切换深色主题">
+    <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path fill="currentColor" d="M9.2 1.4a6.2 6.2 0 1 0 5.4 8.7 4.8 4.8 0 1 1-5.4-8.7z"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <circle cx="8" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" d="M8 1.4v1.8M8 12.8v1.8M1.4 8h1.8M12.8 8h1.8M3.3 3.3l1.3 1.3M11.4 11.4l1.3 1.3M12.7 3.3l-1.3 1.3M4.6 11.4l-1.3 1.3"/>
+    </svg>
+  </button>
+</div>
+</header>
+  <div class="shell no-toc grass-shell">
+    <main>
+<article class="doc">
+  <header class="doc-header">
+    <h1>像素草地的阴影：从物体投影到风格化明暗</h1>
+    
+    <p class="meta">
+      <time datetime="2026-11-09">2026-11-09</time>
+    </p>
+    
+    
+    <ul class="tags">
+      
+      <li>图形学</li>
+      
+      <li>Shader</li>
+      
+      <li>阴影</li>
+      
+    </ul>
+    
+  </header>
+  <div class="doc-body">
+    <p>上一篇<a href="/pixel-grass/">《一片草地的诞生》</a>解释了草片、风动和云影。这一次保留同样的草坪与贴图，在上面放置三块不同高度的立方体，观察它们的影子怎样落在地面与动态草叶上。</p>
+<p>这篇文章的主线是：<strong>先判断光有没有被挡住，再决定这份光怎样变成像素风的明暗。</strong> 各阶段共用同一套布局；切换按钮后，下面的说明与实际运行代码会同步变化。</p>
+<link rel="stylesheet" href="/demos/pixel-grass/lab.css">
+<link rel="stylesheet" href="/demos/grass-shadows/shadow.css">
+<section class="grass-lab shadow-lab" aria-label="草地阴影交互实验">
+  <nav id="grass-tabs" class="grass-tabs" aria-label="阴影接入阶段">
+    
+    <button type="button" data-stage="1" aria-pressed="true"><span>01</span>基准场景</button>
+    
+    <button type="button" data-stage="2" aria-pressed="false"><span>02</span>底板投影</button>
+    
+    <button type="button" data-stage="3" aria-pressed="false"><span>03</span>草叶接收</button>
+    
+    <button type="button" data-stage="4" aria-pressed="false"><span>04</span>动态位置</button>
+    
+    <button type="button" data-stage="5" aria-pressed="false"><span>05</span>分段光照</button>
+    
+    <button type="button" data-stage="6" aria-pressed="false"><span>06</span>环境光</button>
+    
+    <button type="button" data-stage="7" aria-pressed="false"><span>07</span>完整效果</button>
+    
+  </nav>
+  <div class="grass-stage-heading"><span id="stage-number">01 / 07</span><strong id="stage-label">在草坪上放几块立方体</strong></div>
+  <div class="grass-viewport" id="grass-viewport">
+    <canvas id="grass-canvas" tabindex="0" aria-label="阴影草坪，拖动或方向键旋转，滚轮缩放"></canvas>
+    <div id="grass-status" role="status">正在准备草坪与阴影贴图…</div>
+    <div class="grass-overlay"><span>拖动旋转 · 滚轮缩放 · 方向键旋转</span><span id="grass-stats">640 × 360</span></div>
+  </div>
+  <div class="grass-toolbar">
+    <button id="grass-pause" type="button" aria-pressed="false">暂停动画</button>
+    <button id="grass-reset" type="button">重置视角</button>
+    <label><input id="grass-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="shadow-grass" type="checkbox" checked> 显示草叶</label>
+    <label><input id="shadow-mask" type="checkbox"> 查看阴影遮罩</label>
+    <label><input id="grass-pixels" type="checkbox" checked> 像素化</label>
+  </div>
+  <div class="grass-tuning">
+    <label>太阳方向 <input id="shadow-azimuth" type="range" min="0" max="360" step="1" value="305"><output>305°</output></label>
+    <label>太阳高度 <input id="shadow-altitude" type="range" min="25" max="80" step="1" value="48"><output>48°</output></label>
+    <label>直射光 <input id="shadow-sun" type="range" min="0" max="2" step="0.05" value="1.3"><output>1.3</output></label>
+    <label data-from="5">光照色阶 <input id="shadow-cuts" type="range" min="2" max="6" step="1" value="3"><output>3</output></label>
+    <label data-from="6">环境光 <input id="shadow-ambient" type="range" min="0" max="0.8" step="0.02" value="0.22"><output>0.22</output></label>
+    <label data-from="7">阴影软边 <input id="shadow-softness" type="range" min="0" max="3" step="0.25" value="1"><output>1</output></label>
+    <label data-from="7">深度偏移 <input id="shadow-bias" type="range" min="0" max="0.006" step="0.0002" value="0.0008"><output>0.0008</output></label>
+  </div>
+  <div class="shadow-stage-tools">
+    <label><input id="shadow-wind" type="checkbox" checked> 风动</label>
+    <label><input id="shadow-actor" type="checkbox" checked> 移动小球</label>
+    <label data-from="4"><input id="shadow-root" type="checkbox"> 错误示例：按草根查阴影</label>
+    <label data-from="5"><input id="shadow-banded" type="checkbox" checked> 卡通分段</label>
+    <label data-from="7"><input id="shadow-clouds" type="checkbox" checked> 云影</label>
+  </div>
+  <p class="grass-caption" id="grass-caption">固定的草坪与物体，逐步接入阴影。</p>
+  <details class="shadow-map-panel" id="shadow-map-panel">
+    <summary>查看实际使用的光源深度图 · 1024 × 1024</summary>
+    <div class="shadow-map-content">
+      <canvas id="shadow-map" width="256" height="256" aria-label="实时光源深度图，近处黑、远处白"></canvas>
+      <div><p>这是从太阳方向绘制的深度纹理。灰度表示距离光源相机的远近，白色表示该方向未记录到遮挡物。</p><p>立方体和小球写入这张图；草叶与地面只读取它。拖动观察相机不会改变它，调整太阳方向则会改变它。</p><p id="shadow-map-note">展开时刷新预览。场景始终使用完整分辨率的深度图。</p></div>
+    </div>
+  </details>
+  <noscript>实时演示需要 JavaScript；下方仍可阅读所有步骤与代码。</noscript>
+</section>
+<script type="module" src="/demos/grass-shadows/main.js"></script>
+
+<section class="grass-step" data-step="1" aria-labelledby="grass-step-1">
+  <p class="grass-eyebrow">拆解笔记 / STEP 1</p>
+  <h2 id="grass-step-1">基准：背光面与投影是两回事</h2>
+
+<p><strong>本步状态：草坪、立方体、小球都有表面的明暗，但尚未接收物体投影。</strong> 原有的色块、风动、分帧和角色拨草继续运行，云影暂时关闭，便于集中观察真实遮挡。</p>
+<p>把相机转到立方体另一侧，你仍能看到有些面亮、有些面暗。这来自表面朝向与光线方向的关系，并不能说明已经实现了阴影。要出现投影，还必须知道：这个接收点与太阳之间，有没有别的物体。</p>
+<h3 id="场景里放了什么">场景里放了什么</h3>
+<p>三块立方体分别提供较宽、较矮和较高的遮挡。它们的位置在所有阶段都保持一致；小球沿草坪前方的固定路线运动，用于检查移动投影和拨草。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/main.js">main.js</a> / occluders</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">blocks</span><span class="o">=</span><span class="p">[{</span><span class="nx">position</span><span class="o">:</span><span class="p">[</span><span class="o">-</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.1</span><span class="p">,</span><span class="o">-</span><span class="mf">1.8</span><span class="p">],</span><span class="nx">size</span><span class="o">:</span><span class="p">[</span><span class="mf">1.6</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mf">1.6</span><span class="p">],</span><span class="nx">color</span><span class="o">:</span><span class="p">[.</span><span class="mi">78</span><span class="p">,.</span><span class="mi">69</span><span class="p">,.</span><span class="mi">5</span><span class="p">]},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="nx">position</span><span class="o">:</span><span class="p">[</span><span class="mi">1</span><span class="p">,.</span><span class="mi">65</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="nx">size</span><span class="o">:</span><span class="p">[</span><span class="mf">1.8</span><span class="p">,</span><span class="mf">1.3</span><span class="p">,</span><span class="mf">1.8</span><span class="p">],</span><span class="nx">color</span><span class="o">:</span><span class="p">[.</span><span class="mi">61</span><span class="p">,.</span><span class="mi">67</span><span class="p">,.</span><span class="mi">68</span><span class="p">]},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="nx">position</span><span class="o">:</span><span class="p">[</span><span class="mf">3.4</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">],</span><span class="nx">size</span><span class="o">:</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="nx">color</span><span class="o">:</span><span class="p">[.</span><span class="mi">73</span><span class="p">,.</span><span class="mi">53</span><span class="p">,.</span><span class="mi">39</span><span class="p">]}];</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">depthMaterial</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">MeshBasicMaterial</span><span class="p">({</span><span class="nx">color</span><span class="o">:</span><span class="mh">0xffffff</span><span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span><span class="p">(</span><span class="kr">const</span> <span class="nx">block</span> <span class="k">of</span> <span class="nx">blocks</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">mesh</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Mesh</span><span class="p">(</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">BoxGeometry</span><span class="p">(...</span><span class="nx">block</span><span class="p">.</span><span class="nx">size</span><span class="p">),</span><span class="nx">surfaceMaterial</span><span class="p">(</span><span class="nx">block</span><span class="p">.</span><span class="nx">color</span><span class="p">));</span><span class="nx">mesh</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">set</span><span class="p">(...</span><span class="nx">block</span><span class="p">.</span><span class="nx">position</span><span class="p">);</span><span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">mesh</span><span class="p">);</span><span class="nx">surfaceMeshes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">mesh</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">occluder</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Mesh</span><span class="p">(</span><span class="nx">mesh</span><span class="p">.</span><span class="nx">geometry</span><span class="p">,</span><span class="nx">depthMaterial</span><span class="p">);</span><span class="nx">occluder</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">mesh</span><span class="p">.</span><span class="nx">position</span><span class="p">);</span><span class="nx">shadowScene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">occluder</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Grass and ground are intentionally absent from shadowScene: receive, but do not cast.
+</span></span></span></code></pre></div>
+</figure>
+
+<p>这段代码同时为立方体建立了两种表示：主场景中的彩色网格，以及只供光源视角记录深度的遮挡网格。它们共享几何形状和位置。草叶与地面没有加入遮挡场景，因此后续只接收投影，不会互相投影。</p>
+<h3 id="复用的贴图">复用的贴图</h3>
+<div class="grass-textures">
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+  <figure><img data-texture="accentleaf" src="/demos/pixel-grass/textures/accentleaf.png" alt="accentleaf：实时演示使用的纹理" width="192" height="128"><figcaption>accentleaf</figcaption></figure>
+
+  <figure><img data-texture="patch-a"  alt="patch-a：实时演示使用的纹理" width="192" height="128"><figcaption>patch-a</figcaption></figure>
+
+  <figure><img data-texture="patch-b"  alt="patch-b：实时演示使用的纹理" width="192" height="128"><figcaption>patch-b</figcaption></figure>
+
+  <figure><img data-texture="wind"  alt="wind：实时演示使用的纹理" width="192" height="128"><figcaption>wind</figcaption></figure>
+
+</div>
+
+<p>普通草和装饰草使用上一文的两张透明贴图，色块使用同样的两张固定噪声，风场也沿用同一张噪声。此时尚未把任何阴影纹理乘到颜色上。</p>
+<p><strong>观察方式：</strong> 调整太阳方向和高度，检查立方体各面的明暗变化。注意底板上还没有它们的投影。这里从一开始就使用可关闭的直射光，不保留上一文手工光照中的固定最低亮度；环境光要到第六步才加入。
+</section>
+</p>
+<section class="grass-step" data-step="2" aria-labelledby="grass-step-2">
+  <p class="grass-eyebrow">拆解笔记 / STEP 2</p>
+  <h2 id="grass-step-2">投影：从太阳方向保存最近的表面</h2>
+
+<p><strong>本步新增：立方体和小球的阴影先落到底板上。草叶暂不接收。</strong> 密集草叶可能遮住底板上的影子，取消「显示草叶」可以直接观察这一层。</p>
+<h3 id="阴影贴图是怎样生成的">阴影贴图是怎样生成的</h3>
+<p>为太阳建立一台正交相机，从太阳方向朝草坪中心观察。正交投影适合这里的平行光线。以 1024 × 1024 的分辨率绘制遮挡物，深度附件记录每个像素最近的表面。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/main.js">main.js</a> / shadow-target</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// Explicit depth pass: only opaque cubes and the moving sphere are present here.
+</span></span></span><span class="line"><span class="cl">  <span class="nx">sunCamera</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">OrthographicCamera</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">,.</span><span class="mi">1</span><span class="p">,</span><span class="mi">45</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">shadowTarget</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">WebGLRenderTarget</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">,{</span><span class="nx">minFilter</span><span class="o">:</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">NearestFilter</span><span class="p">,</span><span class="nx">magFilter</span><span class="o">:</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">NearestFilter</span><span class="p">,</span><span class="nx">depthBuffer</span><span class="o">:</span><span class="kc">true</span><span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">shadowTarget</span><span class="p">.</span><span class="nx">depthTexture</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">DepthTexture</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">,</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">UnsignedIntType</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">shadowTarget</span><span class="p">.</span><span class="nx">depthTexture</span><span class="p">.</span><span class="nx">minFilter</span><span class="o">=</span><span class="nx">shadowTarget</span><span class="p">.</span><span class="nx">depthTexture</span><span class="p">.</span><span class="nx">magFilter</span><span class="o">=</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">NearestFilter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">uniforms</span><span class="p">.</span><span class="nx">uShadowDepth</span><span class="p">.</span><span class="nx">value</span><span class="o">=</span><span class="nx">shadowTarget</span><span class="p">.</span><span class="nx">depthTexture</span><span class="p">;</span></span></span></code></pre></div>
+</figure>
+
+<p>这里使用 Three.js 执行显式的深度绘制，没有启用它封装好的 <code>renderer.shadowMap</code> 管线。显式写出这一步，方便对照“阴影图里到底有哪些东西”。Godot 参考实现中的这部分由引擎自动完成。</p>
+<p>每次绘制依次进行两遍：先从光源视角写深度图，再从观察相机视角绘制草坪并读取它。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/main.js">main.js</a> / render-passes</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">renderer</span><span class="p">.</span><span class="nx">setRenderTarget</span><span class="p">(</span><span class="nx">shadowTarget</span><span class="p">);</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">setClearColor</span><span class="p">(</span><span class="mh">0xffffff</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">shadowScene</span><span class="p">,</span><span class="nx">sunCamera</span><span class="p">);</span> <span class="c1">// Writes the light camera&#39;s depth attachment.
+</span></span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">setRenderTarget</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">setClearColor</span><span class="p">(</span><span class="mh">0xe6e8df</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">scene</span><span class="p">,</span><span class="nx">camera</span><span class="p">);</span> <span class="c1">// Grass and ground now sample the same depth attachment.
+</span></span></span></code></pre></div>
+</figure>
+
+<h3 id="怎样从世界位置找到深度图上的位置">怎样从世界位置找到深度图上的位置</h3>
+<p>太阳方向既用于光照，也用于放置光源相机。下面的矩阵把世界坐标依次转换成光源视图坐标、裁剪坐标，最后映射到纹理所用的 0～1 范围。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/main.js">main.js</a> / sun-matrix</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">azimuth</span><span class="o">=</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">MathUtils</span><span class="p">.</span><span class="nx">degToRad</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">azimuth</span><span class="p">),</span> <span class="nx">altitude</span><span class="o">=</span><span class="nx">THREE</span><span class="p">.</span><span class="nx">MathUtils</span><span class="p">.</span><span class="nx">degToRad</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">altitude</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">direction</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Vector3</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">azimuth</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">altitude</span><span class="p">),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">altitude</span><span class="p">),</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">azimuth</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">altitude</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">uniforms</span><span class="p">.</span><span class="nx">uSunDirection</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">direction</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">sunCamera</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">direction</span><span class="p">).</span><span class="nx">multiplyScalar</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span><span class="nx">sunCamera</span><span class="p">.</span><span class="nx">lookAt</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="nx">sunCamera</span><span class="p">.</span><span class="nx">updateMatrixWorld</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">biasMatrix</span><span class="o">=</span><span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Matrix4</span><span class="p">().</span><span class="nx">set</span><span class="p">(.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,.</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,.</span><span class="mi">5</span><span class="p">,.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// World -&gt; light view -&gt; light clip -&gt; [0,1] UV/depth.
+</span></span></span><span class="line"><span class="cl">  <span class="nx">uniforms</span><span class="p">.</span><span class="nx">uLightMatrix</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="nx">biasMatrix</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="nx">sunCamera</span><span class="p">.</span><span class="nx">projectionMatrix</span><span class="p">).</span><span class="nx">multiply</span><span class="p">(</span><span class="nx">sunCamera</span><span class="p">.</span><span class="nx">matrixWorldInverse</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>同一个接收点在深度图上查到的数值，代表太阳沿这个方向最先遇到的表面。如果接收点自身的深度更远，就说明它位于遮挡物后面。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a> / depth-compare</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">visibilityAt</span><span class="p">(</span><span class="k">vec3</span> <span class="n">worldPosition</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec4</span> <span class="n">projected</span> <span class="o">=</span> <span class="n">uLightMatrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">uvDepth</span> <span class="o">=</span> <span class="n">projected</span><span class="p">.</span><span class="n">xyz</span> <span class="o">/</span> <span class="n">projected</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Outside the sun camera&#39;s coverage: no occluder recorded.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">any</span><span class="p">(</span><span class="n">lessThan</span><span class="p">(</span><span class="n">uvDepth</span><span class="p">,</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)))</span> <span class="o">||</span> <span class="n">any</span><span class="p">(</span><span class="n">greaterThan</span><span class="p">(</span><span class="n">uvDepth</span><span class="p">,</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))))</span> <span class="k">return</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">receiverDepth</span> <span class="o">=</span> <span class="n">uvDepth</span><span class="p">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">uBias</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// PCF samples adjacent UVs: predict the receiving plane&#39;s depth there too.</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Without this slope correction, a cube can incorrectly shadow its own slanted face.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">dFdx</span><span class="p">(</span><span class="n">uvDepth</span><span class="p">),</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">dFdy</span><span class="p">(</span><span class="n">uvDepth</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">determinant</span> <span class="o">=</span> <span class="n">dx</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">dy</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">dx</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">dy</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">depthSlope</span> <span class="o">=</span> <span class="k">vec2</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">determinant</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.00000001</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">depthSlope</span> <span class="o">=</span> <span class="k">vec2</span><span class="p">(</span><span class="n">dx</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">dy</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">dy</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">dx</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dy</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">dx</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">dx</span><span class="p">.</span><span class="n">z</span> <span class="o">*</span> <span class="n">dy</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">determinant</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">lit</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// PCF averages nine binary visibility tests, NOT nine depth values.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="k">int</span> <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="k">int</span> <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec2</span> <span class="n">offset</span> <span class="o">=</span> <span class="k">vec2</span><span class="p">(</span><span class="k">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="k">float</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> <span class="o">*</span> <span class="n">uFilterRadius</span> <span class="o">/</span> <span class="n">uMapSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">blockerDepth</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uShadowDepth</span><span class="p">,</span> <span class="n">uvDepth</span><span class="p">.</span><span class="n">xy</span> <span class="o">+</span> <span class="n">offset</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lit</span> <span class="o">+=</span> <span class="n">step</span><span class="p">(</span><span class="n">receiverDepth</span> <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">depthSlope</span><span class="p">,</span> <span class="n">offset</span><span class="p">),</span> <span class="n">blockerDepth</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">lit</span> <span class="o">/</span> <span class="mf">9.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>这里用九次深度比较结果的平均值实现 PCF：0 表示全遮挡，1 表示完全可见，中间值形成过滤后的边缘。平均的是<strong>比较结果</strong>，并非先把深度值混合，再比较一次。默认使用一像素的采样间距，第七步可以调节。</p>
+<p>斜面上的相邻采样点自身深度也会变化，因此代码用屏幕导数估算接收面的深度斜率，修正各个样本的比较值。否则，立方体斜对着光源的一面可能错误地遮挡自己，出现细碎条纹；这与草叶的分帧动画无关。</p>
+<p><strong>本步的新纹理：光源深度图。</strong> 它由场景实时生成，不是手绘黑色贴图，也不是云影噪声。展开演示下方的深度图：近处较黑，远处较白；空白区域的深度为 1。移动观察相机不改变光源视角，移动太阳才会改变这张图。
+</section>
+</p>
+<section class="grass-step" data-step="3" aria-labelledby="grass-step-3">
+  <p class="grass-eyebrow">拆解笔记 / STEP 3</p>
+  <h2 id="grass-step-3">接收：让草叶也参与遮挡判断</h2>
+
+<p><strong>本步新增：草叶开始读取与底板相同的阴影贴图。</strong> 如果只给底板加阴影，草叶仍然输出自己的亮颜色，就会把底板上的投影盖住，形成“有阴影，但草还在发亮”的效果。</p>
+<p>为了单独看清接收机制，这一步先采用一个近似：每撮草都用自己的根部位置查询阴影。整撮草因此取得同一个遮挡值。下一步再解决这个位置近似带来的问题。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a> / receiver-position</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="c1">// Stage 3 deliberately demonstrates the root-only approximation.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">receiverPosition</span> <span class="o">=</span> <span class="n">worldPosition</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">isGrass</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">uShadowStage</span> <span class="o">&lt;</span> <span class="mf">4.0</span> <span class="o">||</span> <span class="n">uRootLookup</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">))</span> <span class="n">receiverPosition</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">visibility</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">bool</span> <span class="n">receivesShadow</span> <span class="o">=</span> <span class="n">uShadowStage</span> <span class="o">&gt;=</span> <span class="mf">2.0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">isGrass</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="o">||</span> <span class="n">uShadowStage</span> <span class="o">&gt;=</span> <span class="mf">3.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">receivesShadow</span><span class="p">)</span> <span class="n">visibility</span> <span class="o">=</span> <span class="n">visibilityAt</span><span class="p">(</span><span class="n">receiverPosition</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p><code>isGrass</code> 区分叶片与其他表面：第二步只让地面和立方体接收，第三步开始让叶片参与。地面使用连续的表面位置，草暂时使用根部。只开启材质上的一个接收标记，不会自动让完全自定义的片元代码学会使用阴影，必须把这个可见度值接入最终光照。</p>
+<h3 id="贴图怎样组合">贴图怎样组合</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">色块噪声 → 草根所在区域的底色
+</span></span><span class="line"><span class="cl">草叶贴图 → 叶片轮廓
+</span></span><span class="line"><span class="cl">光源深度图 → 这个位置的光线可见度
+</span></span><span class="line"><span class="cl">                         ↓
+</span></span><span class="line"><span class="cl">                   底色 × 受光结果
+</span></span></code></pre></div><p>原有底色、草叶 UV 与风噪声保持各自职责。阴影只改变受光强度，不改草的形状，也不重新生成草的颜色分布。</p>
+<p><strong>观察方式：</strong> 选择「查看阴影遮罩」，白色表示可见，黑色表示被挡住；这是诊断画面，不受环境光和太阳强度影响。开启「对比上一步」，可以看到原本没有接收阴影的叶片开始一起变暗。
+</section>
+</p>
+<section class="grass-step" data-step="4" aria-labelledby="grass-step-4">
+  <p class="grass-eyebrow">拆解笔记 / STEP 4</p>
+  <h2 id="grass-step-4">位置：阴影必须跟着变形后的叶片走</h2>
+
+<p><strong>本步新增：草叶使用风动、拨草之后的真实表面位置查询阴影。</strong> 根部取色仍然保留；取色位置与阴影位置不必相同。</p>
+<p>一撮草的根部可能在光里，草尖却伸进了立方体的影子。如果整撮草只查询根部，草尖就会错误地保持明亮；反过来，根部被挡住时，已经伸出阴影的草尖也可能整片发黑。</p>
+<h3 id="把同一个位置交给两条计算链">把同一个位置交给两条计算链</h3>
+<p>局部摇摆、角色拨草和世界风动计算完成后，得到 <code>aRoot + offset</code>。把它同时用于画面投影，以及传给片元阶段的 <code>vWorld</code>：</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/grass.vert.glsl">grass.vert.glsl</a> / animated-position</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="n">vWorld</span> <span class="o">=</span> <span class="n">aRoot</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span> <span class="c1">// Same deformed world position for projection and shadow lookup.</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">projectionMatrix</span> <span class="o">*</span> <span class="n">viewMatrix</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">vWorld</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>片元阶段读取插值后的 <code>vWorld</code>，再使用第二步的光源矩阵和深度比较函数。相机中的叶片与阴影查询点因此一致。</p>
+<p>提供这次思路的 Godot 参考实现使用 <code>skip_vertex_transform</code>，所以需要显式写入视图空间位置与法线：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="n">VERTEX</span> <span class="o">=</span> <span class="p">(</span><span class="n">VIEW_MATRIX</span> <span class="o">*</span> <span class="k">vec4</span><span class="p">(</span><span class="n">aRoot</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)).</span><span class="n">xyz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">NORMAL</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">mat3</span><span class="p">(</span><span class="n">VIEW_MATRIX</span><span class="p">)</span> <span class="o">*</span> <span class="n">normal</span><span class="p">);</span>
+</span></span></code></pre></div><p>网页中使用世界空间的 <code>vWorld</code> 做查询，两者的坐标接口不同，但遵守同一个原则：<strong>从实际变形后的顶点出发，不能继续使用未变形的顶点或固定草根。</strong> 此处只改变叶片的接收位置；草叶没有写入深度图，所以无需再做草叶投影用的变形材质。</p>
+<p><strong>观察方式：</strong> 暂停后放大立方体阴影边缘，勾选「错误示例：按草根查阴影」进行对照。也可以保持风动或让小球经过附近，检查草片穿过边界时的明暗变化。关闭风动仍保留小球拨草，两者可分别观察。
+</section>
+</p>
+<section class="grass-step" data-step="5" aria-labelledby="grass-step-5">
+  <p class="grass-eyebrow">拆解笔记 / STEP 5</p>
+  <h2 id="grass-step-5">分段：量化受光，不量化阴影可见度</h2>
+
+<p><strong>本步新增：卡通分段亮度。</strong> 真实阴影决定光能否到达，风格化函数决定到达的光怎样表现，这两个步骤分开处理。</p>
+<p>先计算朝向与光方向的点积，再用与 Godot 参考实现对应的 <code>bandedDiffuse()</code> 将连续亮度组织成几档。每个档位之间保留一小段渐变。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a> / bands</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">bandedDiffuse</span><span class="p">(</span><span class="k">float</span> <span class="n">diffuse</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">bands</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">uCuts</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">value</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">diffuse</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">bands</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">boundary</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">blend</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.255</span><span class="p">,</span> <span class="n">value</span> <span class="o">-</span> <span class="n">boundary</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">clamp</span><span class="p">((</span><span class="n">boundary</span> <span class="o">+</span> <span class="n">blend</span><span class="p">)</span> <span class="o">/</span> <span class="n">bands</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>然后把分段结果乘上阴影可见度与直射光强度。关键顺序是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">法线与光方向 → 分段受光亮度
+</span></span><span class="line"><span class="cl">                         × 阴影可见度
+</span></span><span class="line"><span class="cl">                         × 太阳颜色和强度
+</span></span><span class="line"><span class="cl">                         = 直接光照
+</span></span></code></pre></div><p>不要先把阴影乘进去，再把整个结果硬分段，否则过滤后的阴影边缘也会被重新切断。在 Godot 参考代码中，对应的是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">bandedDiffuse</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">NORMAL</span><span class="p">,</span> <span class="n">LIGHT</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">DIFFUSE_LIGHT</span> <span class="o">+=</span> <span class="n">diffuse</span> <span class="o">*</span> <span class="n">cloud</span> <span class="o">*</span> <span class="n">ATTENUATION</span> <span class="o">*</span> <span class="n">LIGHT_COLOR</span> <span class="o">/</span> <span class="n">PI</span><span class="p">;</span>
+</span></span></code></pre></div><p>在这里的单个平行光网页场景中，<code>visibility</code> 对应遮挡产生的可见度；Godot 的 <code>ATTENUATION</code> 是引擎提供的光照衰减，不能泛化为所有灯光下都只有阴影这一项。</p>
+<p><strong>本步不新增纹理。</strong> 仍使用同一张光源深度图，只改变光照组合方式。调节「光照色阶」，或取消「卡通分段」，观察立方体表面和草叶的明暗层次；阴影边缘的过滤应继续存在。
+</section>
+</p>
+<section class="grass-step" data-step="6" aria-labelledby="grass-step-6">
+  <p class="grass-eyebrow">拆解笔记 / STEP 6</p>
+  <h2 id="grass-step-6">暗部：使用环境光，而不是让草自带亮度</h2>
+
+<p><strong>本步新增：独立可调的环境光。</strong> 前面没有环境光，所以完全遮挡直射光的位置可以变黑；现在加入一份偏冷的环境光，让暗部继续保留草叶颜色与细节。</p>
+<p>上一文的演示使用 <code>0.35 + 0.65 × 光照</code> 保证暗部可读；这是一条固定最低亮度。这里移除这条下限，改成明确的环境光输入。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a> / composition</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">normal</span><span class="p">),</span> <span class="n">uSunDirection</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">uShadowStage</span> <span class="o">&gt;=</span> <span class="mf">5.0</span> <span class="o">&amp;&amp;</span> <span class="n">uBanded</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="n">bandedDiffuse</span><span class="p">(</span><span class="n">diffuse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">cloud</span> <span class="o">=</span> <span class="p">(</span><span class="n">uShadowStage</span> <span class="o">&gt;=</span> <span class="mf">7.0</span> <span class="o">&amp;&amp;</span> <span class="n">uCloudEnabled</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">?</span> <span class="n">cloudAtSun</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">)</span> <span class="o">:</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">directLight</span> <span class="o">=</span> <span class="n">uSunColor</span> <span class="o">*</span> <span class="n">uSunEnergy</span> <span class="o">*</span> <span class="n">diffuse</span> <span class="o">*</span> <span class="n">visibility</span> <span class="o">*</span> <span class="n">cloud</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">ambientLight</span> <span class="o">=</span> <span class="n">uShadowStage</span> <span class="o">&gt;=</span> <span class="mf">6.0</span> <span class="o">?</span> <span class="n">uAmbientColor</span> <span class="o">*</span> <span class="n">uAmbientEnergy</span> <span class="o">:</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// No emissive term and no constant brightness floor. Both lights off =&gt; black.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">decodeSRGB</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">directLight</span> <span class="o">+</span> <span class="n">ambientLight</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>最终组合是：<strong>线性空间的底色 ×（直接光照 + 环境光照）</strong>。环境光不乘立方体的直射阴影遮罩，直接光则会受到物体遮挡与云影影响。结果再转换为屏幕显示颜色，避免直接在显示编码颜色上进行光照相乘。</p>
+<p>这里的环境光是统一的近似输入，并没有实现环境遮蔽或完整全局光照。它也不是自发光：<code>uAmbientEnergy</code> 为零时，这一项会完整消失。</p>
+<h3 id="用关灯验证逻辑">用关灯验证逻辑</h3>
+<ol>
+<li>关闭「查看阴影遮罩」，确保正在看最终画面。</li>
+<li>将直射光设为 0，只保留环境光：草、地面和方块还有颜色，但没有太阳造成的明暗对比。</li>
+<li>再把环境光设为 0：所有这些物体应该全黑。</li>
+<li>恢复直射光和环境光，观察投影与暗部细节回来。</li>
+</ol>
+<p>背景只是展示用的固定颜色，不参与场景光照；检查“关灯全黑”时看的是物体表面，不是要求整张画布连背景一起变黑。本步没有增加环境贴图，环境颜色和强度直接由参数传入。
+</section>
+</p>
+<section class="grass-step" data-step="7" aria-labelledby="grass-step-7">
+  <p class="grass-eyebrow">拆解笔记 / STEP 7</p>
+  <h2 id="grass-step-7">组合：清晰草叶、柔和阴影与独立云影</h2>
+
+<p><strong>本步新增：云影组合，并开放阴影软边和深度偏移参数。</strong> 至此，风动决定叶片姿态，立方体决定真实遮挡，云层噪声调节大范围直射光，环境光负责暗部。</p>
+<h3 id="透明轮廓一直保留">透明轮廓一直保留</h3>
+<div class="grass-textures">
+
+  <figure><img data-texture="grassleaf" src="/demos/pixel-grass/textures/grassleaf.png" alt="grassleaf：实时演示使用的纹理" width="192" height="128"><figcaption>grassleaf</figcaption></figure>
+
+  <figure><img data-texture="accentleaf" src="/demos/pixel-grass/textures/accentleaf.png" alt="accentleaf：实时演示使用的纹理" width="192" height="128"><figcaption>accentleaf</figcaption></figure>
+
+  <figure><img data-texture="cloud"  alt="cloud：实时演示使用的纹理" width="192" height="128"><figcaption>cloud</figcaption></figure>
+
+</div>
+
+<p>草叶使用最近邻采样；透明像素直接丢弃，不输出一块半透明矩形。下面的判断从第一步就启用，而不是到最后才修补：</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/grass.frag.glsl">grass.frag.glsl</a> / silhouette</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">leaf</span><span class="p">.</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">0.99</span><span class="p">)</span> <span class="k">discard</span><span class="p">;</span> <span class="c1">// Transparent texels neither shade nor write visible depth.</span></span></span></code></pre></div>
+</figure>
+
+<p>草叶不写入光源深度图，因此不会互相投影。这可以避免密集草片形成大量碎黑斑，同时保留立方体、小球投到草上的阴影。如果以后让草也投影，必须在光源绘制阶段同步草片变形与透明裁切，不能直接把未变形的矩形写进深度图。</p>
+<h3 id="云影与物体阴影各用一份输入">云影与物体阴影各用一份输入</h3>
+<p>云影沿用上一文的两层噪声组合，但这次投影方向跟随太阳参数。它不会修改立方体生成的深度图。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a> / cloud-light</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">cloudAtSun</span><span class="p">(</span><span class="k">vec3</span> <span class="n">worldPosition</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// Same two-layer cloud recipe as the previous article, aligned with the current sun.</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">8.0</span> <span class="o">-</span> <span class="n">worldPosition</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">uSunDirection</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldPosition</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">uSunDirection</span><span class="p">).</span><span class="n">xz</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uCloud</span><span class="p">,</span> <span class="n">uv</span> <span class="o">+</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="mf">0.349066</span><span class="p">)</span> <span class="o">*</span> <span class="n">uTime</span> <span class="o">*</span> <span class="mf">0.018</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">uCloud</span><span class="p">,</span> <span class="n">uv</span> <span class="o">*</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="n">rotate2</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.349066</span><span class="p">)</span> <span class="o">*</span> <span class="n">uTime</span> <span class="o">*</span> <span class="mf">0.018</span> <span class="o">*</span> <span class="mf">0.89</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">sampleValue</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">clamp</span><span class="p">((</span><span class="n">sampleValue</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">3.845</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.27</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<table>
+	<thead>
+			<tr>
+					<th>输入</th>
+					<th>采样依据</th>
+					<th>影响的结果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>草叶／装饰贴图</td>
+					<td>变形后的草叶 UV</td>
+					<td>草的轮廓与底色细节</td>
+			</tr>
+			<tr>
+					<td>色块噪声</td>
+					<td>地面位置或草根 XZ</td>
+					<td>固定的区域颜色</td>
+			</tr>
+			<tr>
+					<td>风场噪声</td>
+					<td>草根 XZ 与分帧时间</td>
+					<td>叶片旋转和假透视</td>
+			</tr>
+			<tr>
+					<td>光源深度图</td>
+					<td>变形后的真实表面位置</td>
+					<td>立方体、小球造成的遮挡</td>
+			</tr>
+			<tr>
+					<td>云影噪声</td>
+					<td>沿太阳方向投到云层的位置</td>
+					<td>大范围直射光强弱</td>
+			</tr>
+			<tr>
+					<td>环境光参数</td>
+					<td>统一颜色与强度</td>
+					<td>阴影中的基础照明</td>
+			</tr>
+	</tbody>
+</table>
+<p>物体阴影与云影在这篇文章中相乘后作用于直射光，环境光单独相加。这与上一文用 <code>min()</code> 限制亮度的简化方式不同，对应这次 Godot 参考实现的乘法组合。</p>
+<h3 id="怎样调软边与偏移">怎样调软边与偏移</h3>
+<p>「阴影软边」改变九个比较样本之间的距离。设为 0 时重复比较同一个位置，得到硬边；增大可以看到过滤边缘。它是固定九点 PCF，不是物理面积光源的真实半影，调得过大会出现稀疏采样痕迹。</p>
+<p>「深度偏移」用于抵消深度精度和斜面比较误差。太小可能产生表面斑纹，太大会让阴影从物体底部脱开。不要用一个很大的偏移掩盖错误的坐标计算。</p>
+<p>展开实际深度图，可以看到预览由当前 GPU 深度附件转换成灰度图取得：</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/grass-shadows/main.js">main.js</a> / depth-preview</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// Read an actual GPU visualization of the depth attachment, not an illustrative image.
+</span></span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">setRenderTarget</span><span class="p">(</span><span class="nx">previewTarget</span><span class="p">);</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">previewScene</span><span class="p">,</span><span class="nx">previewCamera</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">readRenderTargetPixels</span><span class="p">(</span><span class="nx">previewTarget</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">,</span><span class="nx">previewBytes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">y</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">y</span><span class="o">&lt;</span><span class="mi">256</span><span class="p">;</span><span class="nx">y</span><span class="o">++</span><span class="p">)</span><span class="nx">previewImage</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">previewBytes</span><span class="p">.</span><span class="nx">subarray</span><span class="p">(</span><span class="nx">y</span><span class="o">*</span><span class="mi">1024</span><span class="p">,(</span><span class="nx">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="p">),(</span><span class="mi">255</span><span class="o">-</span><span class="nx">y</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;shadow-map&#39;</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">).</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">previewImage</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">renderer</span><span class="p">.</span><span class="nx">setRenderTarget</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>预览缩小为 256 × 256，并只在展开且可见时刷新；场景查询仍使用完整的 1024 × 1024 纹理。原始深度图是硬深度，软边发生在接收阶段的多次比较中，所以不应该期待预览本身变成一张模糊的影子图片。</p>
+<p><strong>最后的检查：</strong> 改变太阳方向，阴影随之移动；旋转观察相机，阴影仍固定在世界里；暂停后检查草尖穿过边界的状态；关闭所有光照检查物体全黑；最后恢复云影观察完整组合。
+</section>
+</p>
+<hr>
+<p><strong>实现与来源</strong></p>
+<p>本文的网页演示参考 Godot 项目中 <code>grass.gdshader</code> 的变形顶点和光照函数，以及 <code>common.gdshaderinc</code> 的 <code>bandedDiffuse()</code>，采用同样的“分段漫反射 × 阴影衰减”顺序。网页使用独立的光源深度绘制与自定义接收函数，未复刻 Godot 的全部灯光系统。</p>
+<p>草坪实例、风场和素材沿用<a href="/pixel-grass/">上一篇文章</a>。Grass assets by <strong>Dylearn</strong>，草叶贴图按 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> 使用；原始算法来源于 <a href="https://github.com/DylearnDev/Dylearn-3D-Pixel-Art-Grass-Demo">Dylearn 的草地项目</a>，遵循 MIT 许可。参见<a href="/demos/pixel-grass/CREDITS.md">素材与算法署名</a>及<a href="/demos/grass-shadows/CREDITS.md">本篇改动说明</a>。</p>
+<p>完整入口：<a href="/demos/grass-shadows/main.js">main.js</a>；阴影与光照：<a href="/demos/grass-shadows/lighting.glsl">lighting.glsl</a>。代码面板在构建时直接读取运行文件中的标记段落，保持讲解和实现一致。</p>
+
+  </div>
+</article>
+
+    </main></div><script>
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      if (themeBtn) {
+        var dark = theme === "dark";
+        themeBtn.setAttribute("aria-label", dark ? "切换浅色主题" : "切换深色主题");
+      }
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+    }
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+    var headings = [];
+    tocLinks.forEach(function (link) {
+      var id = decodeURIComponent((link.getAttribute("href") || "").replace(/^#/, ""));
+      var heading = id ? document.getElementById(id) : null;
+      if (heading) headings.push({ heading: heading, link: link });
+    });
+    if (headings.length && "IntersectionObserver" in window) {
+      var active = null;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          if (active) active.classList.remove("is-active");
+          var match = headings.filter(function (item) { return item.heading === entry.target; })[0];
+          if (match) {
+            match.link.classList.add("is-active");
+            active = match.link;
+          }
+        });
+      }, { rootMargin: "-64px 0px -70% 0px", threshold: 0.1 });
+      headings.forEach(function (item) { observer.observe(item.heading); });
+    }
+  })();
+</script>
+<script defer src="/js/code-blocks.js"></script>
+</body>
+
+</html>
