@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="http://huyuqwqovo.top/images/favicon.png" />
+<title>两颗像素宝石的光路：从切割外壳到彩色火彩 | huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</title>
+<meta name="title" content="两颗像素宝石的光路：从切割外壳到彩色火彩" />
+<meta name="description" content="在同一组灯带下，给阶梯切割的绿宝石和圆形切割的钻石逐步加入反射、折射、路径吸收与色散。" />
+<meta name="keywords" content="图形学,Shader,像素艺术," />
+
+
+<meta property="og:url" content="http://huyuqwqovo.top/gem-optics/">
+	<meta property="og:site_name" content="huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog">
+	<meta property="og:title" content="两颗像素宝石的光路：从切割外壳到彩色火彩">
+	<meta property="og:description" content="在同一组灯带下，给阶梯切割的绿宝石和圆形切割的钻石逐步加入反射、折射、路径吸收与色散。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2026-11-12T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-11-12T00:00:00+08:00">
+		<meta property="article:tag" content="图形学">
+		<meta property="article:tag" content="Shader">
+		<meta property="article:tag" content="像素艺术">
+		<meta property="og:image" content="http://huyuqwqovo.top/images/share.png">
+
+
+
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="http://huyuqwqovo.top/images/share.png">
+	<meta name="twitter:title" content="两颗像素宝石的光路：从切割外壳到彩色火彩">
+	<meta name="twitter:description" content="在同一组灯带下，给阶梯切割的绿宝石和圆形切割的钻石逐步加入反射、折射、路径吸收与色散。">
+
+
+
+
+	<meta itemprop="name" content="两颗像素宝石的光路：从切割外壳到彩色火彩">
+	<meta itemprop="description" content="在同一组灯带下，给阶梯切割的绿宝石和圆形切割的钻石逐步加入反射、折射、路径吸收与色散。">
+	<meta itemprop="datePublished" content="2026-11-12T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-11-12T00:00:00+08:00">
+	<meta itemprop="wordCount" content="718">
+	<meta itemprop="image" content="http://huyuqwqovo.top/images/share.png">
+	<meta itemprop="keywords" content="图形学,Shader,像素艺术">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.5/400.css">
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var theme = stored === "dark" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --layer: #f4f4f4;
+    --layer-hover: #e8e8e8;
+    --text: #161616;
+    --text-secondary: #525252;
+    --text-helper: #6f6f6f;
+    --link: #0f62fe;
+    --link-hover: #0043ce;
+    --border: #e0e0e0;
+    --border-strong: #8d8d8d;
+    --selected: #e8e8e8;
+    --accent: #0f62fe;
+    --header-h: 48px;
+    --sidenav-w: 256px;
+    --toc-w: 224px;
+    --content-w: 800px;
+    --font: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #161616;
+    --layer: #262626;
+    --layer-hover: #353535;
+    --text: #f4f4f4;
+    --text-secondary: #c6c6c6;
+    --text-helper: #a8a8a8;
+    --link: #78a9ff;
+    --link-hover: #a6c8ff;
+    --border: #393939;
+    --border-strong: #6f6f6f;
+    --selected: #353535;
+    --accent: #0f62fe;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; border-radius: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.75;
+    padding-top: var(--header-h);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  a { color: var(--link); }
+  a:hover { color: var(--link-hover); }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font);
+    color: var(--text);
+    line-height: 1.3;
+    scroll-margin-top: 64px;
+  }
+
+  h1 { font-size: 40px; font-weight: 300; margin: 0 0 16px; }
+  h2 { font-size: 28px; font-weight: 400; margin: 40px 0 16px; }
+  h3 { font-size: 20px; font-weight: 600; margin: 32px 0 8px; }
+  h4, h5, h6 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; }
+
+  p { margin: 0 0 16px; }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 8000;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px 0 16px;
+  }
+
+  .brand {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand:hover { color: var(--text); text-decoration: none; }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 40px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .icon-btn:hover { background: var(--layer-hover); }
+
+  .theme-toggle { width: 40px; padding: 0; }
+  .theme-toggle svg { display: block; }
+  .theme-toggle .icon-sun { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, var(--content-w)) var(--toc-w);
+    justify-content: center;
+    align-items: start;
+    width: min(100%, calc(var(--content-w) + var(--toc-w)));
+    margin: 0 auto;
+  }
+
+  .shell.no-toc { grid-template-columns: minmax(0, var(--content-w)); width: min(100%, var(--content-w)); }
+
+  .toc {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow: auto;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  main { min-width: 0; padding: 32px 32px 64px; }
+
+  .nav-label {
+    margin: 16px 16px 8px;
+    color: var(--text-helper);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    background: var(--layer-hover);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .toc a {
+    color: var(--text-secondary);
+    border-left: 1px solid var(--border);
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .toc ul { list-style: none; margin: 0; padding: 0; }
+  .toc li ul a { padding-left: 32px; }
+  .toc a.is-active {
+    color: var(--link);
+    border-left: 2px solid var(--accent);
+    background: var(--layer);
+    font-weight: 600;
+  }
+
+  .doc-header { margin-bottom: 24px; }
+  .doc-body { font-size: 16px; line-height: 1.75; }
+  .doc-body > :first-child { margin-top: 0; }
+
+  .meta {
+    margin: 0;
+    color: var(--text-helper);
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.32px;
+  }
+
+  .section-label {
+    margin: 32px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .post-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title date"
+      "excerpt excerpt";
+    gap: 8px 16px;
+    align-items: start;
+    padding: 16px;
+    background: var(--layer);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .post-row:hover { background: var(--layer-hover); color: var(--text); text-decoration: none; }
+
+  .post-row h2 {
+    grid-area: title;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .post-row time {
+    grid-area: date;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .post-row .card-excerpt { grid-area: excerpt; }
+
+  .card-excerpt {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .tags li {
+    padding: 2px 8px;
+    background: var(--layer);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .doc-body a { color: var(--link); text-decoration: none; }
+  .doc-body a:hover { color: var(--link-hover); text-decoration: underline; }
+  .text-link { color: var(--link); text-decoration: none; }
+  .text-link:hover { text-decoration: underline; }
+
+  hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 16px 16px 16px 20px;
+    background: var(--layer);
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  blockquote p:last-child { margin-bottom: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; }
+  th, td { border: 1px solid var(--border); padding: 12px 16px; text-align: left; vertical-align: top; }
+  th { background: var(--layer); font-weight: 600; }
+
+  code, pre, .highlight {
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  code {
+    padding: 0 4px;
+    background: var(--layer);
+    color: var(--text);
+  }
+
+  pre, .highlight {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--layer);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  pre code, .highlight code { padding: 0; background: transparent; }
+
+  .highlight pre { margin: 0; padding: 0; border: 0; background: transparent; }
+
+  img { max-width: 100%; height: auto; border: 1px solid var(--border); }
+
+  details { margin: 16px 0; border: 1px solid var(--border); background: var(--bg); }
+  summary { padding: 12px 16px; background: var(--layer); font-weight: 600; cursor: pointer; }
+  details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+
+  ul, ol { margin: 0 0 16px; padding-left: 24px; }
+  li { margin: 4px 0; }
+
+  @media (max-width: 1100px) {
+    .shell, .shell.no-toc {
+      grid-template-columns: minmax(0, 1fr);
+      width: min(100%, var(--content-w));
+    }
+    .toc {
+      position: static;
+      height: auto;
+      border-left: 0;
+      border-bottom: 1px solid var(--border);
+      order: -1;
+      padding: 8px 16px 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 32px; }
+    main { padding: 24px 16px 48px; }
+    .post-row { gap: 8px 12px; }
+  }
+</style>
+<link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/code-blocks.css">
+</head>
+
+<body><header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/">huyuxi Ciallo～(∠・ω&lt; )⌒★ Blog</a>
+  <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="切换深色主题">
+    <svg class="icon-moon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path fill="currentColor" d="M9.2 1.4a6.2 6.2 0 1 0 5.4 8.7 4.8 4.8 0 1 1-5.4-8.7z"/>
+    </svg>
+    <svg class="icon-sun" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <circle cx="8" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" d="M8 1.4v1.8M8 12.8v1.8M1.4 8h1.8M12.8 8h1.8M3.3 3.3l1.3 1.3M11.4 11.4l1.3 1.3M12.7 3.3l-1.3 1.3M4.6 11.4l-1.3 1.3"/>
+    </svg>
+  </button>
+</div>
+</header>
+  <div class="shell no-toc grass-shell">
+    <main>
+<article class="doc">
+  <header class="doc-header">
+    <h1>两颗像素宝石的光路：从切割外壳到彩色火彩</h1>
+    
+    <p class="meta">
+      <time datetime="2026-11-12">2026-11-12</time>
+    </p>
+    
+    
+    <ul class="tags">
+      
+      <li>图形学</li>
+      
+      <li>Shader</li>
+      
+      <li>像素艺术</li>
+      
+    </ul>
+    
+  </header>
+  <div class="doc-body">
+    <p>左边的绿宝石有宽阔的台面和一圈圈台阶，右边的钻石由朝向各异的三角切面围成。两颗宝石共用一间只有白灯的摄影棚。到第六步，左边才真正变绿；到第七步，右边的白色亮面边缘才开始分色。</p>
+<p>拖动任一颗可以同时旋转两颗。每一步都可以勾选「对比上一步」，在相同视角和灯位下观察本步的变化。也可以<a href="#step-8">直接看完成效果</a>。</p>
+<link rel="stylesheet" href="/demos/pixel-grass/lab.css">
+<link rel="stylesheet" href="/demos/gem-optics/lab.css">
+<section class="grass-lab gem-lab" aria-label="宝石光学实验">
+  <nav class="grass-tabs" aria-label="制作步骤">
+    
+    <button type="button" data-gem-stage="1" aria-pressed="true"><span>01</span>切割外壳</button>
+    
+    <button type="button" data-gem-stage="2" aria-pressed="false"><span>02</span>摄影棚照明</button>
+    
+    <button type="button" data-gem-stage="3" aria-pressed="false"><span>03</span>表面反射</button>
+    
+    <button type="button" data-gem-stage="4" aria-pressed="false"><span>04</span>首次出射</button>
+    
+    <button type="button" data-gem-stage="5" aria-pressed="false"><span>05</span>内部反弹</button>
+    
+    <button type="button" data-gem-stage="6" aria-pressed="false"><span>06</span>路径吸收</button>
+    
+    <button type="button" data-gem-stage="7" aria-pressed="false"><span>07</span>RGB 色散</button>
+    
+    <button type="button" data-gem-stage="8" aria-pressed="false"><span>08</span>星芒与抗锯齿</button>
+    
+  </nav>
+  <div class="gem-view">
+    <canvas id="gem-canvas" tabindex="0" aria-label="左侧绿宝石、右侧钻石；拖动或使用方向键旋转两颗宝石"></canvas>
+    <div id="gem-status" role="status">正在加载宝石切面…</div>
+  </div>
+  <div class="gem-legend"><span>绿宝石 · 阶梯切割</span><span>钻石 · 圆形切割</span></div>
+  <div class="grass-toolbar">
+    <label><input id="gem-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="gem-spin" type="checkbox"> 自动旋转</label>
+    <button id="gem-reset" type="button">重置视角</button>
+    <small>拖动或按方向键旋转</small>
+  </div>
+  <div class="grass-tuning">
+    
+    <label data-from="1">每颗横向像素 <input id="gem-resolution" type="range" min="100" max="400" step="10" value="220"><output>220</output></label>
+    
+    <label data-from="2">灯组方位 ° <input id="gem-lamp" type="range" min="0" max="360" step="1" value="32"><output>32</output></label>
+    
+    <label data-from="3">绿宝石折射率 <input id="gem-emerald-ior" type="range" min="1.05" max="2.8" step="0.01" value="1.58"><output>1.58</output></label>
+    
+    <label data-from="3">钻石折射率 <input id="gem-diamond-ior" type="range" min="1.05" max="2.8" step="0.01" value="2.42"><output>2.42</output></label>
+    
+    <label data-from="5">内部碰面上限 <input id="gem-bounces" type="range" min="1" max="12" step="1" value="7"><output>7</output></label>
+    
+    <label data-from="6">吸收强度 <input id="gem-absorb" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+    
+    <label data-from="7">色散强度 <input id="gem-spread" type="range" min="0" max="2" step="0.05" value="1"><output>1</output></label>
+    
+    <label data-from="8">星芒强度 <input id="gem-glare" type="range" min="0" max="3" step="0.05" value="0.65"><output>0.65</output></label>
+    
+    <label data-from="8"><input id="gem-aa" type="checkbox" checked> 边缘抗锯齿</label>
+  </div>
+  <noscript>启用 JavaScript 可操作宝石。下方保留全部步骤的文字与代码。</noscript>
+</section>
+<script type="module" src="/demos/gem-optics/main.js"></script>
+
+<section class="grass-step" data-step="1" aria-labelledby="grass-step-1">
+  <p class="grass-eyebrow">拆解笔记 / STEP 1</p>
+  <h2 id="grass-step-1">用一圈圈顶点围出能追踪光线的外壳</h2>
+
+<p><strong>看外形。</strong> 左边的截角长方形由几圈尺寸不同的八边形堆成，形成长条形台阶。右边用圆周上的点构成腰围，再错开上、下各圈顶点的角度，收到底部尖点。现在用灰色标出不同朝向，转动时已经能辨认两种切割。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/cuts.js">cuts.js</a> / outline</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">cutVertices</span><span class="p">(</span><span class="nx">emerald</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">points</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">emerald</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">outline</span> <span class="o">=</span> <span class="p">[[.</span><span class="mi">78</span><span class="p">,.</span><span class="mi">54</span><span class="p">],[.</span><span class="mi">55</span><span class="p">,.</span><span class="mi">77</span><span class="p">],[</span><span class="o">-</span><span class="p">.</span><span class="mi">55</span><span class="p">,.</span><span class="mi">77</span><span class="p">],[</span><span class="o">-</span><span class="p">.</span><span class="mi">78</span><span class="p">,.</span><span class="mi">54</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">                     <span class="p">[</span><span class="o">-</span><span class="p">.</span><span class="mi">78</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">54</span><span class="p">],[</span><span class="o">-</span><span class="p">.</span><span class="mi">55</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">77</span><span class="p">],[.</span><span class="mi">55</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">77</span><span class="p">],[.</span><span class="mi">78</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">54</span><span class="p">]];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Radius and height of each step, from the table to the keel.
+</span></span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">radius</span><span class="p">,</span><span class="nx">y</span><span class="p">]</span> <span class="k">of</span> <span class="p">[[.</span><span class="mi">64</span><span class="p">,.</span><span class="mi">46</span><span class="p">],[.</span><span class="mi">85</span><span class="p">,.</span><span class="mi">32</span><span class="p">],[</span><span class="mi">1</span><span class="p">,.</span><span class="mi">09</span><span class="p">],[</span><span class="mi">1</span><span class="p">,.</span><span class="mi">02</span><span class="p">],[.</span><span class="mi">83</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">26</span><span class="p">],[.</span><span class="mi">55</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">53</span><span class="p">],[.</span><span class="mi">20</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">72</span><span class="p">]])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span><span class="nx">z</span><span class="p">]</span> <span class="k">of</span> <span class="nx">outline</span><span class="p">)</span> <span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Vector3</span><span class="p">(</span><span class="nx">x</span><span class="o">*</span><span class="nx">radius</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="o">*</span><span class="nx">radius</span><span class="o">*</span><span class="mf">1.48</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span><span class="nx">radius</span><span class="p">,</span><span class="nx">y</span><span class="p">,</span><span class="nx">offset</span><span class="p">]</span> <span class="k">of</span> <span class="p">[[</span><span class="mi">8</span><span class="p">,.</span><span class="mi">57</span><span class="p">,.</span><span class="mi">46</span><span class="p">,.</span><span class="mi">5</span><span class="p">],[</span><span class="mi">8</span><span class="p">,.</span><span class="mi">81</span><span class="p">,.</span><span class="mi">32</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">,.</span><span class="mi">06</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">8</span><span class="p">,.</span><span class="mi">58</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">32</span><span class="p">,.</span><span class="mi">5</span><span class="p">]])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">count</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">angle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="nx">offset</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="nx">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Vector3</span><span class="p">(</span><span class="nx">radius</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">),</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">radius</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">points</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Vector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="p">.</span><span class="mi">83</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">points</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>网格要用两次。</strong> 先找出包住全部顶点的凸多面体。对每个外表面保存朝外的单位法线和它到原点的有向距离，然后将面上的顶点排成一圈，拆成三角形交给显卡绘制。例如，绿宝石的八边形台面在画面里由多个三角形填满，追踪光线时只算一个平面。两种表示来自同一批点，后面才能准确找到光从哪一面出去。</p>
+<p><strong>试一试。</strong> 把「每颗横向像素」从 220 降到 100，再用方向键转到侧面。腰线会呈现更明显的像素台阶，参与光线求交的切面数量保持原值。两个模型和后续的灯光都由代码生成。</p>
+</section>
+
+<section class="grass-step" data-step="2" aria-labelledby="grass-step-2">
+  <p class="grass-eyebrow">拆解笔记 / STEP 2</p>
+  <h2 id="grass-step-2">先给宝石一个有明暗方向的环境</h2>
+
+<p><strong>看受光面。</strong> 两颗灰色外壳现在都有朝灯的一面和背光的一面。观察左边同一条长台阶，保持视角不动，只拖动「灯组方位」，它会整块变亮或变暗。</p>
+<p>这一步先用每个面的法线与主灯方向做点积，负值截为零，再加上一点基础照明。接下来镜面和内部光路需要知道某个方向上具体有什么，因此还给摄影棚定义了一个方向函数。它把天顶渐变、一段横向灯带、一块面灯与窄条灯组合成亮度分布。调节灯组方位会同时转动主灯和这组分布。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / studio</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">studio</span><span class="p">(</span><span class="k">vec3</span> <span class="n">direction</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">d</span> <span class="o">=</span> <span class="n">objectRotation</span> <span class="o">*</span> <span class="n">direction</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">c</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">lampAngle</span><span class="p">),</span> <span class="n">s</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">lampAngle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">d</span><span class="p">.</span><span class="n">xz</span> <span class="o">=</span> <span class="k">mat2</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="o">-</span><span class="n">s</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">.</span><span class="n">xz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">ceiling</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="o">-</span><span class="mf">.2</span><span class="p">,</span><span class="mf">.95</span><span class="p">,</span><span class="n">d</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">band</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">smoothstep</span><span class="p">(</span><span class="mf">.08</span><span class="p">,</span><span class="mf">.18</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">y</span><span class="o">-</span><span class="mf">.44</span><span class="p">)))</span> <span class="o">*</span> <span class="n">smoothstep</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span><span class="mf">.15</span><span class="p">,</span><span class="n">d</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">panel</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="mf">.72</span><span class="p">,</span><span class="mf">.84</span><span class="p">,</span><span class="n">d</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">smoothstep</span><span class="p">(</span><span class="mf">.25</span><span class="p">,</span><span class="mf">.42</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="mf">.11</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">strip</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">smoothstep</span><span class="p">(</span><span class="mf">.04</span><span class="p">,</span><span class="mf">.11</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">x</span><span class="o">-</span><span class="mf">.28</span><span class="p">)))</span> <span class="o">*</span> <span class="n">smoothstep</span><span class="p">(</span><span class="mf">.05</span><span class="p">,</span><span class="mf">.35</span><span class="p">,</span><span class="o">-</span><span class="n">d</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">.026</span> <span class="o">+</span> <span class="mf">.24</span><span class="o">*</span><span class="n">ceiling</span> <span class="o">+</span> <span class="mf">3.6</span><span class="o">*</span><span class="n">band</span> <span class="o">+</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">panel</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">strip</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>用于观察灰色外壳受光变化的计算只需三行：</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / diffuse-light</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">worldNormal</span> <span class="o">=</span> <span class="n">objectRotation</span><span class="o">*</span><span class="n">normal</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">lamp</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="k">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">lampAngle</span><span class="p">),</span><span class="mf">1.1</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">lampAngle</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">diffuse</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">.12</span><span class="o">+</span><span class="mf">.6</span><span class="o">*</span><span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">worldNormal</span><span class="p">,</span><span class="n">lamp</span><span class="p">),</span><span class="mf">0.0</span><span class="p">));</span></span></span></code></pre></div>
+</figure>
+
+<p>摄影棚函数输入是一条方向，输出是该方向的线性 RGB 辐亮度。三通道初始相等。亮灯的数值可以超过 1，保留亮度差，供最后提取星芒。这里由函数承担环境贴图的作用，因此读者看到的反光都可以追溯到同一套白灯。</p>
+</section>
+
+<section class="grass-step" data-step="3" aria-labelledby="grass-step-3">
+  <p class="grass-eyebrow">拆解笔记 / STEP 3</p>
+  <h2 id="grass-step-3">让切面映出灯带，用 Fresnel 分配入口能量</h2>
+
+<p><strong>看表面。</strong> 旋转两颗宝石，一些切面会短暂映出明亮的灯带。相邻切面即使只相差一点角度，也可能分别映到灯带和旁边的暗处。这个阶段保留灰色底层，让新增的表面反光容易辨认。</p>
+<p>每个可见像素经光栅化取得入口位置和切面法线。把相机指向该点的方向绕法线反射，再沿反射方向读取摄影棚。Fresnel 给出表面反射的比例 <code>F</code>，留下 <code>1 − F</code> 给透射。代码用两种偏振反射率的平均值计算自然光的比例。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / fresnel</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">fresnel</span><span class="p">(</span><span class="k">vec3</span> <span class="n">incident</span><span class="p">,</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">,</span> <span class="k">float</span> <span class="n">ratio</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">cosIn</span> <span class="o">=</span> <span class="n">clamp</span><span class="p">(</span><span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">),</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">sinOut2</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">*</span><span class="n">ratio</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">cosIn</span><span class="o">*</span><span class="n">cosIn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">sinOut2</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">return</span> <span class="mf">1.0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">cosOut</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">sinOut2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">rs</span> <span class="o">=</span> <span class="p">(</span><span class="n">ratio</span><span class="o">*</span><span class="n">cosIn</span><span class="o">-</span><span class="n">cosOut</span><span class="p">)</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">ratio</span><span class="o">*</span><span class="n">cosIn</span><span class="o">+</span><span class="n">cosOut</span><span class="p">,</span><span class="mf">.00001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">rp</span> <span class="o">=</span> <span class="p">(</span><span class="n">cosIn</span><span class="o">-</span><span class="n">ratio</span><span class="o">*</span><span class="n">cosOut</span><span class="p">)</span> <span class="o">/</span> <span class="n">max</span><span class="p">(</span><span class="n">cosIn</span><span class="o">+</span><span class="n">ratio</span><span class="o">*</span><span class="n">cosOut</span><span class="p">,</span><span class="mf">.00001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mf">.5</span><span class="o">*</span><span class="p">(</span><span class="n">rs</span><span class="o">*</span><span class="n">rs</span><span class="o">+</span><span class="n">rp</span><span class="o">*</span><span class="n">rp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>取到反光颜色后，本步按 Fresnel 比例把它叠到灰色外壳上。第四步将用可追踪的内部透射替代灰色部分。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / coat</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">share</span> <span class="o">=</span> <span class="n">fresnel</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="n">ior</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="n">mix</span><span class="p">(</span><span class="n">diffuse</span><span class="p">,</span><span class="n">studio</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">)),</span><span class="n">share</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p><strong>调折射率。</strong> 两颗的默认值分别为 1.58 和 2.42。仅看垂直入射，反射比例约为 5% 和 17%，所以右边的钻石即使还没加入内部光路，也能有更强的表面反光。只调「绿宝石折射率」，右边就可以留作对照。</p>
+</section>
+
+<section class="grass-step" data-step="4" aria-labelledby="grass-step-4">
+  <p class="grass-eyebrow">拆解笔记 / STEP 4</p>
+  <h2 id="grass-step-4">折进宝石，找到第一个出口</h2>
+
+<p><strong>看台面里出现了什么。</strong> 上一步切面下方的灰色底层被第一段真实光路替代。能在第一次碰撞时射出的光，带回出口方向的环境明暗；遇到全内反射的区域此时只能看到入口的表面反光。右边钻石中一些切面因此会很暗。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / entry</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">surfaceShare</span> <span class="o">=</span> <span class="n">fresnel</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">result</span> <span class="o">=</span> <span class="n">surfaceShare</span> <span class="o">*</span> <span class="n">studio</span><span class="p">(</span><span class="n">reflect</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">weight</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">surfaceShare</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">refract</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">facePosition</span> <span class="o">+</span> <span class="mf">.0001</span><span class="o">*</span><span class="n">dir</span><span class="p">;</span></span></span></code></pre></div>
+</figure>
+
+<p>空气进入宝石时折射率比取 <code>1/n</code>。从入口沿折射方向走，把射线与各切面所在的平面求交。在这个封闭凸体中，向外接近的平面里，最近的正距离就是下一次碰撞的距离。起点轻微向前挪动，避免浮点误差让光线立即再撞回刚离开的面。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / intersect</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">float</span> <span class="n">nextFacet</span><span class="p">(</span><span class="k">vec3</span> <span class="n">origin</span><span class="p">,</span> <span class="k">vec3</span> <span class="n">direction</span><span class="p">,</span> <span class="k">out</span> <span class="k">vec3</span> <span class="n">normal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">closest</span> <span class="o">=</span> <span class="mi">1</span><span class="n">e5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">normal</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="k">int</span> <span class="n">i</span><span class="o">=</span><span class="mo">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">FACET_COUNT</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec4</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">facets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">approach</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span><span class="n">plane</span><span class="p">.</span><span class="n">xyz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">approach</span> <span class="o">&lt;=</span> <span class="mf">.00001</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">dot</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span><span class="n">plane</span><span class="p">.</span><span class="n">xyz</span><span class="p">))</span><span class="o">/</span><span class="n">approach</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mf">.00001</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">closest</span><span class="p">)</span> <span class="p">{</span> <span class="n">closest</span><span class="o">=</span><span class="n">t</span><span class="p">;</span> <span class="n">normal</span><span class="o">=</span><span class="n">plane</span><span class="p">.</span><span class="n">xyz</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">closest</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>到达出口后，法线反向，折射率比改成 <code>n/1</code>。能穿出时，<strong>沿出射方向读取灯光</strong>，把环境颜色乘上到达该处的能量和出口透射比例，加到当前像素已有的表面反光上。调节任一颗的折射率，除了入口的反光强弱，内部亮块的位置也会移动。这个阶段只累加第一次可能的出射。</p>
+</section>
+
+<section class="grass-step" data-step="5" aria-labelledby="grass-step-5">
+  <p class="grass-eyebrow">拆解笔记 / STEP 5</p>
+  <h2 id="grass-step-5">把每次出射的光加回来，让剩下的继续反弹</h2>
+
+<p><strong>看同一切面里的花纹。</strong> 把「内部碰面上限」设为 1，再逐渐提高。尤其注意右边钻石中央原本暗下去的块面。有些光经过两三次反弹才找到朝向亮灯的出口，这时一个可见切面里会出现多块明暗图案。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / split</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">hit</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">distanceToFace</span><span class="o">*</span><span class="n">dir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec3</span> <span class="n">exitDir</span> <span class="o">=</span> <span class="n">refract</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="o">-</span><span class="n">outward</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">exitDir</span><span class="p">,</span><span class="n">exitDir</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">float</span> <span class="n">reflected</span> <span class="o">=</span> <span class="n">fresnel</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="o">-</span><span class="n">outward</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">result</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">-</span><span class="n">reflected</span><span class="p">)</span> <span class="o">*</span> <span class="n">studio</span><span class="p">(</span><span class="n">exitDir</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">weight</span> <span class="o">*=</span> <span class="n">reflected</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Total internal reflection has no exit contribution and retains all weight.</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dir</span> <span class="o">=</span> <span class="n">reflect</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="o">-</span><span class="n">outward</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">origin</span> <span class="o">=</span> <span class="n">hit</span> <span class="o">+</span> <span class="mf">.0001</span><span class="o">*</span><span class="n">dir</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">weight</span><span class="p">.</span><span class="n">r</span><span class="p">,</span><span class="n">weight</span><span class="p">.</span><span class="n">g</span><span class="p">),</span><span class="n">weight</span><span class="p">.</span><span class="n">b</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">.001</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span></span></span></code></pre></div>
+</figure>
+
+<p>每次碰撞都遵守同一本能量账。如果到达切面还剩 0.8 的权重，Fresnel 反射比例为 25%，就用 <code>0.8 × 0.75 = 0.6</code> 乘上这一次出射方向的环境亮度，加进像素；剩下的 0.2 沿镜面反射方向继续追踪。如果超过临界角，发生全内反射，这次没有出口，全部剩余权重传到下一段。</p>
+<p><strong>到上限时怎样收尾？</strong> 本演示只累加已找到的出口，达到碰面上限就舍弃尚未出射的余量。权重低于 0.001 时也提前结束。低上限会低估一些长光路的亮度，特别适合对照哪些区域依赖多次反弹。所有已经出射的贡献，连同入口表面反射，都属于最初选定的那个屏幕像素。</p>
+</section>
+
+<section class="grass-step" data-step="6" aria-labelledby="grass-step-6">
+  <p class="grass-eyebrow">拆解笔记 / STEP 6</p>
+  <h2 id="grass-step-6">让光走得越远，绿宝石的颜色越深</h2>
+
+<p><strong>看颜色的厚度。</strong> 把「吸收强度」拉到零，左边恢复接近无色。缓慢拉高，可以看到短光路保留更多白光，长光路逐渐变成饱和的深绿；入口直接映出的灯光仍可以是白色。右边的钻石只设置了很弱的近中性吸收。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / beer</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">stage</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">)</span> <span class="n">weight</span> <span class="o">*=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">absorption</span><span class="o">*</span><span class="n">distanceToFace</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>Beer–Lambert 衰减按通道计算。每走完长度为 <code>d</code> 的一段，权重乘以 <code>exp(−σ × d)</code>，再分配这次碰面的反射和透射。连续两段分别乘以指数，等价于使用两段距离之和，因此每一个出口都带着抵达它为止的累计吸收。</p>
+<p>这里用模型长度作单位。左边红、绿、蓝的示范吸收系数依次为 1.35、0.10、0.80。走一个单位后，三个通道分别大约保留 26%、90%、45%。绿色在材料里保留得最多。滑块统一缩放这三个系数，让读者在固定光路上检查颜色变化。</p>
+</section>
+
+<section class="grass-step" data-step="7" aria-labelledby="grass-step-7">
+  <p class="grass-eyebrow">拆解笔记 / STEP 7</p>
+  <h2 id="grass-step-7">三条光路分别回答一个像素的红、绿、蓝</h2>
+
+<p><strong>看白色亮块的边界。</strong> 保持姿态不动，把「色散强度」从零慢慢拉高。钻石上会有亮边分成不同颜色；在同一灯面内部，颜色通常变化较小。绿宝石预设的折射率差较小，材料还会吸收部分红蓝光，分色更含蓄。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/gem.frag.glsl">gem.frag.glsl</a> / rgb</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stage</span> <span class="o">&gt;=</span> <span class="mi">7</span> <span class="o">&amp;&amp;</span> <span class="n">dispersion</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">traceGem</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="n">ior</span><span class="o">-</span><span class="n">dispersion</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">traceGem</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="n">ior</span><span class="p">).</span><span class="n">g</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">traceGem</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="n">ior</span><span class="o">+</span><span class="n">dispersion</span><span class="p">).</span><span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="n">color</span> <span class="o">=</span> <span class="n">traceGem</span><span class="p">(</span><span class="n">incident</span><span class="p">,</span><span class="n">normal</span><span class="p">,</span><span class="n">ior</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>把绿色通道的折射率记为 <code>n</code>。红用 <code>n − Δ</code>，蓝用 <code>n + Δ</code>。每条路径都从同一个入口像素开始，重新算入口 Fresnel、入口折射、每次内部碰撞、吸收和出射。所以它们可能撞到不同切面，走过不同距离，甚至某次只有蓝光发生全内反射。演示用三个通道近似色散，滑块控制的是三者的间距。</p>
+<p><strong>三条路径如何合成？</strong> 假设同一个屏幕像素的红路径读到白灯中心，累加后的红值为 0.95；绿路径读到灯边，绿值为 0.40；蓝路径读到暗处，蓝值为 0.05。把它们写到这个像素的三个槽位，就得到偏橙的 <code>(0.95, 0.40, 0.05)</code>。<strong>同一通道的多次出射做加法；不同通道各写一个分量。</strong> 三条路径只需要有相同的起始像素。</p>
+</section>
+
+<section class="grass-step" data-step="8" aria-labelledby="grass-step-8">
+  <p class="grass-eyebrow">拆解笔记 / STEP 8</p>
+  <h2 id="grass-step-8">从完成的画面提取亮点，再处理像素边缘</h2>
+
+<p><strong>看亮点外侧。</strong> 先关闭「边缘抗锯齿」，把「星芒强度」从 0 向上推。最亮的灯带映像会沿两个斜向延伸，靠近轮廓的亮点能照到旁边的背景。把星芒恢复为 0，再单独开关抗锯齿，就能观察两种处理各自改变了哪些像素。</p>
+<p>先把两颗宝石画进一张离屏纹理。为了在普通八位纹理中保留超过 1 的亮度，写入时将线性光强除以 8 再开平方，读取时平方并乘回 8。随后降到一半宽高，取四个相邻样本的平均值，提取亮度超过 1.05 的部分。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/post.frag.glsl">post.frag.glsl</a> / threshold</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">light</span> <span class="o">=</span> <span class="mf">.25</span><span class="o">*</span><span class="p">(</span><span class="n">unpackLight</span><span class="p">(</span><span class="n">coord</span><span class="o">+</span><span class="mf">.5</span><span class="o">*</span><span class="n">texel</span><span class="p">)</span><span class="o">+</span><span class="n">unpackLight</span><span class="p">(</span><span class="n">coord</span><span class="o">-</span><span class="mf">.5</span><span class="o">*</span><span class="n">texel</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">+</span> <span class="n">unpackLight</span><span class="p">(</span><span class="n">coord</span><span class="o">+</span><span class="mf">.5</span><span class="o">*</span><span class="n">texel</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="n">unpackLight</span><span class="p">(</span><span class="n">coord</span><span class="o">+</span><span class="mf">.5</span><span class="o">*</span><span class="n">texel</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">intensity</span> <span class="o">=</span> <span class="n">luma</span><span class="p">(</span><span class="n">light</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">light</span> <span class="o">*</span> <span class="n">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="n">intensity</span><span class="o">-</span><span class="mf">1.05</span><span class="p">)</span><span class="o">/</span><span class="n">max</span><span class="p">(</span><span class="n">intensity</span><span class="p">,</span><span class="mf">.001</span><span class="p">)</span><span class="o">/</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">);</span></span></span></code></pre></div>
+</figure>
+
+<p>沿两个近乎垂直的方向采样这张亮部纹理，距离中心越远，权重越小。将两个方向的结果相加，再乘星芒强度，加回宝石图像。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/post.frag.glsl">post.frag.glsl</a> / sparkle</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">star</span><span class="p">(</span><span class="k">vec2</span> <span class="n">uv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">sum</span> <span class="o">=</span> <span class="k">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="k">int</span> <span class="n">i</span><span class="o">=-</span><span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">float</span> <span class="n">k</span> <span class="o">=</span> <span class="k">float</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="mf">.32</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">vec2</span> <span class="n">stepUV</span> <span class="o">=</span> <span class="mf">2.4</span><span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">texel</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sum</span> <span class="o">+=</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">texture2D</span><span class="p">(</span><span class="n">brightImage</span><span class="p">,</span><span class="n">uv</span><span class="o">+</span><span class="n">stepUV</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="mf">.94</span><span class="p">,</span><span class="mf">.34</span><span class="p">)).</span><span class="n">rgb</span>
+</span></span><span class="line"><span class="cl">                   <span class="o">+</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">brightImage</span><span class="p">,</span><span class="n">uv</span><span class="o">+</span><span class="n">stepUV</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="o">-</span><span class="mf">.34</span><span class="p">,</span><span class="mf">.94</span><span class="p">)).</span><span class="n">rgb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">sum</span> <span class="o">*</span> <span class="p">(</span><span class="mf">6.0</span><span class="o">/</span><span class="mf">12.65</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+<p>简化 FXAA 在原图上读取四个对角邻点的亮度。局部对比足够高时，沿估算出的边缘方向混合相邻颜色。最后将合成的亮度映射到屏幕可显示的范围。调低「每颗横向像素」再切换抗锯齿，可以看清哪些阶梯边缘被柔化。</p>
+
+
+
+
+
+  
+  
+  
+  
+  
+
+<figure class="grass-code">
+  <figcaption>实际运行代码 · <a href="/demos/gem-optics/post.frag.glsl">post.frag.glsl</a> / fxaa</figcaption>
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="k">vec3</span> <span class="n">smoothEdge</span><span class="p">(</span><span class="k">vec2</span> <span class="n">uv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec3</span> <span class="n">center</span> <span class="o">=</span> <span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">nw</span><span class="o">=</span><span class="n">luma</span><span class="p">(</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">+</span><span class="n">texel</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))),</span> <span class="n">ne</span><span class="o">=</span><span class="n">luma</span><span class="p">(</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">+</span><span class="n">texel</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">sw</span><span class="o">=</span><span class="n">luma</span><span class="p">(</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">-</span><span class="n">texel</span><span class="p">)),</span> <span class="n">se</span><span class="o">=</span><span class="n">luma</span><span class="p">(</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">+</span><span class="n">texel</span><span class="o">*</span><span class="k">vec2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">float</span> <span class="n">low</span><span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="n">nw</span><span class="p">,</span><span class="n">ne</span><span class="p">),</span><span class="n">min</span><span class="p">(</span><span class="n">sw</span><span class="p">,</span><span class="n">se</span><span class="p">)),</span> <span class="n">high</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">nw</span><span class="p">,</span><span class="n">ne</span><span class="p">),</span><span class="n">max</span><span class="p">(</span><span class="n">sw</span><span class="p">,</span><span class="n">se</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span> <span class="o">&lt;</span> <span class="n">max</span><span class="p">(</span><span class="mf">.035</span><span class="p">,</span><span class="mf">.12</span><span class="o">*</span><span class="n">high</span><span class="p">))</span> <span class="k">return</span> <span class="n">center</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">vec2</span> <span class="n">tangent</span> <span class="o">=</span> <span class="k">vec2</span><span class="p">(</span><span class="n">sw</span><span class="o">+</span><span class="n">se</span><span class="o">-</span><span class="n">nw</span><span class="o">-</span><span class="n">ne</span><span class="p">,</span><span class="n">nw</span><span class="o">+</span><span class="n">sw</span><span class="o">-</span><span class="n">ne</span><span class="o">-</span><span class="n">se</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">tangent</span> <span class="o">/=</span> <span class="n">max</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">tangent</span><span class="p">.</span><span class="n">x</span><span class="p">),</span><span class="n">abs</span><span class="p">(</span><span class="n">tangent</span><span class="p">.</span><span class="n">y</span><span class="p">)),</span><span class="mf">.001</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mf">.5</span><span class="o">*</span><span class="n">center</span> <span class="o">+</span> <span class="mf">.25</span><span class="o">*</span><span class="p">(</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">+</span><span class="mf">.75</span><span class="o">*</span><span class="n">texel</span><span class="o">*</span><span class="n">tangent</span><span class="p">)</span><span class="o">+</span><span class="n">base</span><span class="p">(</span><span class="n">uv</span><span class="o">-</span><span class="mf">.75</span><span class="o">*</span><span class="n">texel</span><span class="o">*</span><span class="n">tangent</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</figure>
+
+</section>
+
+<p>切割、摄影棚、光路与后处理均为本篇的浏览器实现，渲染沿用本站草地演示的 Three.js。凸切面求交、界面能量分配和星芒的思路可对照 <a href="https://github.com/piellardj/diamond-webgl#readme">diamond-webgl 的图解</a>。本文的代码面板直接取自演示使用的源文件。</p>
+
+  </div>
+</article>
+
+    </main></div><script>
+  (function () {
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme-toggle");
+
+    function applyTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+      if (themeBtn) {
+        var dark = theme === "dark";
+        themeBtn.setAttribute("aria-label", dark ? "切换浅色主题" : "切换深色主题");
+      }
+    }
+
+    applyTheme(root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+    }
+
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+    var headings = [];
+    tocLinks.forEach(function (link) {
+      var id = decodeURIComponent((link.getAttribute("href") || "").replace(/^#/, ""));
+      var heading = id ? document.getElementById(id) : null;
+      if (heading) headings.push({ heading: heading, link: link });
+    });
+    if (headings.length && "IntersectionObserver" in window) {
+      var active = null;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          if (active) active.classList.remove("is-active");
+          var match = headings.filter(function (item) { return item.heading === entry.target; })[0];
+          if (match) {
+            match.link.classList.add("is-active");
+            active = match.link;
+          }
+        });
+      }, { rootMargin: "-64px 0px -70% 0px", threshold: 0.1 });
+      headings.forEach(function (item) { observer.observe(item.heading); });
+    }
+  })();
+</script>
+<script defer src="/js/code-blocks.js"></script>
+</body>
+
+</html>

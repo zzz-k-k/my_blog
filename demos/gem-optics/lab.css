@@ -1,0 +1,13 @@
+.gem-lab .grass-tabs {grid-template-columns:repeat(8,minmax(0,1fr))}
+.gem-lab .grass-tabs button[aria-pressed=true] {background:#195649;box-shadow:inset 0 -3px #86d7c1}
+.gem-view {position:relative;background:#1d2b32}
+#gem-canvas {display:block;width:100%;aspect-ratio:2.65;touch-action:none;cursor:grab;image-rendering:pixelated}
+#gem-canvas:active {cursor:grabbing}
+#gem-status {position:absolute;inset:40% 5% auto;text-align:center;color:white;background:#203039}
+.gem-legend {display:grid;grid-template-columns:1fr 1fr;text-align:center;color:#d9e9e7;background:#1d2b32;font-size:13px;padding:8px 0}
+.gem-legend span+span {border-left:1px solid #66817a}
+.gem-lab .grass-toolbar small {color:var(--text-secondary)}
+.gem-lab .grass-tuning input[type=checkbox] {width:auto}
+@media(max-width:700px){.gem-lab .grass-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}.gem-lab .grass-tabs button{font-size:12px}.gem-legend{font-size:11px}#gem-canvas{aspect-ratio:2.2}}
+
+@media(max-width:700px){.gem-lab .grass-tabs button span{display:block;margin:0 0 3px}.gem-lab .grass-tabs button{padding:7px 2px}}

@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="{{ "demos/pixel-grass/lab.css" | relURL }}">
+<link rel="stylesheet" href="{{ "demos/gem-optics/lab.css" | relURL }}">
+<section class="grass-lab gem-lab" aria-label="宝石光学实验">
+  <nav class="grass-tabs" aria-label="制作步骤">
+    {{ range $i,$name := slice "切割外壳" "摄影棚照明" "表面反射" "首次出射" "内部反弹" "路径吸收" "RGB 色散" "星芒与抗锯齿" }}
+    <button type="button" data-gem-stage="{{ add $i 1 }}" aria-pressed="{{ eq $i 0 }}"><span>{{ printf "%02d" (add $i 1) }}</span>{{ $name }}</button>
+    {{ end }}
+  </nav>
+  <div class="gem-view">
+    <canvas id="gem-canvas" tabindex="0" aria-label="左侧绿宝石、右侧钻石；拖动或使用方向键旋转两颗宝石"></canvas>
+    <div id="gem-status" role="status">正在加载宝石切面…</div>
+  </div>
+  <div class="gem-legend"><span>绿宝石 · 阶梯切割</span><span>钻石 · 圆形切割</span></div>
+  <div class="grass-toolbar">
+    <label><input id="gem-compare" type="checkbox"> 对比上一步</label>
+    <label><input id="gem-spin" type="checkbox"> 自动旋转</label>
+    <button id="gem-reset" type="button">重置视角</button>
+    <small>拖动或按方向键旋转</small>
+  </div>
+  <div class="grass-tuning">
+    {{ range slice (slice "resolution" "每颗横向像素" 100 400 10 220 1) (slice "lamp" "灯组方位 °" 0 360 1 32 2) (slice "emerald-ior" "绿宝石折射率" 1.05 2.8 .01 1.58 3) (slice "diamond-ior" "钻石折射率" 1.05 2.8 .01 2.42 3) (slice "bounces" "内部碰面上限" 1 12 1 7 5) (slice "absorb" "吸收强度" 0 2 .05 1 6) (slice "spread" "色散强度" 0 2 .05 1 7) (slice "glare" "星芒强度" 0 3 .05 .65 8) }}
+    <label data-from="{{ index . 6 }}">{{ index . 1 }} <input id="gem-{{ index . 0 }}" type="range" min="{{ index . 2 }}" max="{{ index . 3 }}" step="{{ index . 4 }}" value="{{ index . 5 }}"><output>{{ index . 5 }}</output></label>
+    {{ end }}
+    <label data-from="8"><input id="gem-aa" type="checkbox" checked> 边缘抗锯齿</label>
+  </div>
+  <noscript>启用 JavaScript 可操作宝石。下方保留全部步骤的文字与代码。</noscript>
+</section>
+<script type="module" src="{{ "demos/gem-optics/main.js" | relURL }}"></script>
